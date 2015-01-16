@@ -31,7 +31,7 @@ class CM_Admin_Settings_Notifications extends CC_Admin_Setting {
 
         // Add member home select box
         $home_title = __( 'Member Home Page', 'cart66_members');
-        $home = new CC_Admin_Settings_Select_Box( $home_title, $this->option_name, 'member_home' );
+        $home = new CC_Admin_Settings_Select_Box( $home_title, 'member_home' );
         $home->new_option( 'Secure Order History', 'order_history', false );
         $home->description = __( 'The page where members will be directed after logging in', 'cart66_members' );
         $this->build_member_homepage_list( $home, $option_values['member_home'] );

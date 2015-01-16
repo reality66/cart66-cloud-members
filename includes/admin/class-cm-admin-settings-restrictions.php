@@ -33,7 +33,7 @@ class CM_Admin_Settings_Restrictions extends CC_Admin_Setting {
         // Add text field
         $title = __( 'Color', 'cart66_members');
         $value = esc_attr( $option_values[ 'color' ] );
-        $color = new CC_Admin_Settings_Text_Field( $title, $this->option_name, 'color', $value );
+        $color = new CC_Admin_Settings_Text_Field( $title, 'color', $value );
         $color->description = __( 'The color you like most', 'cart66_members' );
         $section->add_field( $color );
 
