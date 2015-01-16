@@ -3,13 +3,10 @@
 class CM_Admin_Settings_Restrictions extends CC_Admin_Setting {
 
     public static function init() {
-        $page = 'cart66_members';
+        $page = 'cart66_members_restriction_settings';
         $option_group = 'cart66_members_restrictions';
-        return parent::__construct( $page, $option_group );
-    }
-
-    public function render_section() {
-        _e( 'Members Settings For Category Restrictions', 'cart66_members' );
+        $setting = new CM_Admin_Settings_Restrictions( $page, $option_group );
+        return $setting;
     }
 
     /**

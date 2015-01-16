@@ -19,7 +19,7 @@ class CM_Admin {
         add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 
         CM_Admin_Settings_Notifications::init();
-        // CM_Admin_Settings_Restrictions::init();
+        CM_Admin_Settings_Restrictions::init();
     }
 
     public function add_menu_page() {

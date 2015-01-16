@@ -9,10 +9,6 @@ class CM_Admin_Settings_Notifications extends CC_Admin_Setting {
         return $setting;
     }
 
-    public function render_section() {
-        _e( 'Members Settings For Notifications', 'cart66_members' );
-    }
-
     /**
      * admin_init hooked in by parent class constructor
      */
