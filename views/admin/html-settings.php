@@ -23,12 +23,13 @@ settings_errors( 'cart66_members_settings' );
     <form method="post" action="options.php">
         <?php
 
-        do_settings_sections('cart66_members');          // menu_slug used in add_settings_section
 
         if ( 'notifications' == $active_tab ) {
-            settings_fields('cart66_members_notifications'); // option_group
+            do_settings_sections('cart66_members_notification_settings'); // menu_slug used in add_settings_section
+            settings_fields('cart66_members_notifications');              // option_group
         } elseif ( 'category-restrictions' == $active_tab ) {
-            settings_fields('cart66_members_restrictions');  // option_group
+            do_settings_sections('cart66_members_restriction_settings'); // menu_slug used in add_settings_section
+            settings_fields('cart66_members_restrictions');               // option_group
         }
 
         // Submit button.

@@ -3,7 +3,7 @@
 class CM_Admin_Settings_Notifications extends CC_Admin_Setting {
 
     public static function init() {
-        $page = 'cart66_members';
+        $page = 'cart66_members_notification_settings';
         $option_group = 'cart66_members_notifications';
         $setting = new CM_Admin_Settings_Notifications( $page, $option_group );
         return $setting;
