@@ -33,6 +33,12 @@ class CM_Admin_Settings_Notifications extends CC_Admin_Setting {
         $this->build_member_homepage_list( $home, $option_values['member_home'] );
         $section->add_field( $home );
 
+        // Add sign in required editor
+        $sign_in_title = __( 'Sign In Required', 'cart66_members' );
+        $sign_in = new CC_Admin_Settings_Editor( $sign_in_title, 'sign_in_required', $option_values['sign_in_required'] );
+        $sign_in->description = __( 'Text displayed when a user must sign in to access the content', 'cart66_members' );
+        $section->add_field( $sign_in );
+
         // Add the settings sections for the page and register the settings
         $this->add_section( $section );
 
