@@ -110,6 +110,8 @@ if ( ! class_exists('Cart66_Members') ) {
                     include_once $root . 'includes/exception-library.php';
                 } elseif ( cc_starts_with( $class, 'cm_admin' ) ) {
                     include_once $root . 'includes/admin/' . $file;
+                } elseif ( cc_starts_with( $class, 'cm_cloud' ) ) {
+                    include_once $root . 'includes/cloud/' . $file;
                 } else {
                     include_once $root . 'includes/' . $file;
                 }
