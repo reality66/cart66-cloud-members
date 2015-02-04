@@ -18,6 +18,9 @@ class CM_Admin {
         self::$tabs = array( 'notifications', 'category-restrictions' );
         add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 
+        add_action( 'add_meta_boxes', array('CM_Admin_Memberships_MetaBox', 'add_memberships_box'), 20);
+        add_action( 'save_post',      array('CM_Admin_Memberships_MetaBox', 'save_membership_requirements'), 20);
+        
         CM_Admin_Settings_Notifications::init();
         CM_Admin_Settings_Restrictions::init();
     }
