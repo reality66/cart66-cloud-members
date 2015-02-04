@@ -4,7 +4,9 @@ class CM_Admin_Restriction_Options extends CC_Admin_Settings_Field {
 
     public function render( $args ) {
         $list = $this->category_tree($args);
-        echo '<p>' . $args['description'] . '</p>';
+        if ( ! empty( $this->description ) ) {
+            echo '<p>' . $this->description . '</p>';
+        }
         echo $list;
     }
     
@@ -13,14 +15,14 @@ class CM_Admin_Restriction_Options extends CC_Admin_Settings_Field {
         $out = '';
 
         $category_args = array(
-        	'type'                 => 'post',
-        	'child_of'         => 0,
-        	'parent'             => $parent,
-        	'orderby'            => 'name',
-        	'order'                => 'ASC',
-        	'hide_empty'     => 0,
+        	'type'         => 'post',
+        	'child_of'     => 0,
+        	'parent'       => $parent,
+        	'orderby'      => 'name',
+        	'order'        => 'ASC',
+        	'hide_empty'   => 0,
         	'hierarchical' => 1,
-        	'taxonomy'         => 'category'
+        	'taxonomy'     => 'category'
         );
 
         $categories = get_categories( $category_args );

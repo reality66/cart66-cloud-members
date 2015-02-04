@@ -30,6 +30,7 @@ class CM_Admin_Settings_Restrictions extends CC_Admin_Setting {
         // Add category checkboxes
         $restriction_title = __( 'Content Restrictions', 'cart66-members' );
         $restrictions = new CM_Admin_Restriction_Options( $restriction_title, 'category_restrictions', $option_values );
+        $restrictions->description = '<strong>' . __( 'Your Categories', 'cart66-members' ) . '</strong>';
         $section->add_field( $restrictions );
 
         // Add the settings sections for the page and register the settings

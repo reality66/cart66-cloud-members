@@ -68,10 +68,10 @@ class CM_Cloud_Expiring_Products {
     public function load() {
         if( !empty( self::$expiring_products ) ) {
             $product_data = self::$expiring_products;
-            CC_Log::write('Reusing expiring products rather than loading them again from the cloud.');
+            // CC_Log::write('Reusing expiring products rather than loading them again from the cloud.');
         }
         else {
-            CC_Log::write('Loading expiring products from the cloud');
+            // CC_Log::write('Loading expiring products from the cloud');
             $url = self::$cloud->api . 'products/expiring';
             $headers = array('Accept' => 'application/json');
             $response = wp_remote_get( $url, self::$cloud->basic_auth_header( $headers ) );
@@ -83,7 +83,7 @@ class CM_Cloud_Expiring_Products {
 
             $product_data = json_decode( $response['body'], true );
             self::$expiring_products = $product_data;
-            CC_Log::write('Loaded expiring products from the cloud: ' . print_r(self::$expiring_products, TRUE));
+            // CC_Log::write('Loaded expiring products from the cloud: ' . print_r(self::$expiring_products, TRUE));
         }
 
         return $product_data;
