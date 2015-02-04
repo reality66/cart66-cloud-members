@@ -75,7 +75,7 @@ if ( ! class_exists('Cart66_Members') ) {
 
         public function __construct() {
             // Define constants
-            define( 'CC_VERSION_NUMBER', $this->version_number() );
+            define( 'CM_VERSION_NUMBER', $this->version_number() );
 
             // Register autoloader
             spl_autoload_register( array( $this, 'class_loader' ) );
@@ -87,7 +87,7 @@ if ( ! class_exists('Cart66_Members') ) {
         public function register_actions() {
             // Initialize core classes
             add_action( 'init', array( $this, 'init' ), 0 );
-
+            add_action( 'activated_plugin', 'cm_save_activation_error' );
         }
 
         public function init() {
@@ -129,7 +129,7 @@ if ( ! class_exists('Cart66_Members') ) {
               require_once(ABSPATH . 'wp-admin/includes/plugin.php');
             }
 
-            $plugin_data = get_plugin_data(CC_PLUGIN_FILE);
+            $plugin_data = get_plugin_data(CM_PLUGIN_FILE);
             return $plugin_data['Version'];
         }
 

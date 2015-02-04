@@ -19,7 +19,13 @@ class CM_Admin_Settings_Notifications extends CC_Admin_Setting {
 
     public function register_notification_section() {
         // Set the name for the options in this section and load any stored values
-        $option_values = self::get_options( $this->option_name );
+        $defaults = array(
+            'member_home' => '',
+            'not_included' => '',
+            'post_types' => array(),
+            'sign_in_required' => '',
+        );
+        $option_values = self::get_options( $this->option_name, $defaults );
 
         // Create the section for the cart66_main_settings section
         $title = __( 'Access Notifications', 'cart66_members' );

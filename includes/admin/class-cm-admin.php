@@ -30,7 +30,7 @@ class CM_Admin {
         $capability = 'manage_options';
         $menu_slug = 'cart66_members';
         $options_page = add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, array($this, 'render') );
-        CC_Log::write( "Add submenu page value: $options_page" );
+        // CC_Log::write( "Add submenu page value: $options_page" );
     }
 
     public function render() {
