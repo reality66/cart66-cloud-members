@@ -88,6 +88,26 @@ if ( ! class_exists('Cart66_Members') ) {
             // Initialize core classes
             add_action( 'init', array( $this, 'init' ), 0 );
             add_action( 'activated_plugin', 'cm_save_activation_error' );
+
+            // Redirect to access denied page
+            $monitor = new CM_Monitor();
+            add_action( 'template_redirect', array( $monitor, 'access_denied_redirect' ) );
+
+            // Remove content from restricted pages
+            add_filter( 'the_content', array( $monitor, 'restrict_pages' ) );
+            add_filter( 'the_posts',   array( $monitor, 'filter_posts' ) );
+
+            // Filter restricted pages that are not part of nav menus
+            add_filter( 'get_pages',          array( $monitor, 'filter_pages' ) );
+            add_filter( 'nav_menu_css_class', array( $monitor, 'filter_menus' ), 10, 2 );
+            add_action( 'wp_enqueue_scripts', array( $monitor, 'enqueue_css' ) );
+
+            // Remove restricted categores from the category widget
+            add_filter( 'widget_categories_args', array( $monitor, 'filter_category_widget' ), 10, 2 );
+            
+            // Check if current visitor is logged signed in to the cloud
+            $visitor = new CM_Visitor();
+            add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );
         }
 
         public function init() {

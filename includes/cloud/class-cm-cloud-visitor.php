@@ -42,7 +42,7 @@ class CM_Cloud_Visitor {
      * @param string $status The types of memberships and subscriptions to include (all, active, canceled, expired)
      * @return array
      */
-    public function get_memberships($token, $status='active') {
+    public function get_memberships( $token, $status='active' ) {
         $memberships = array();
 
         if ( !empty( $token ) && strlen( $token ) > 3 ) {

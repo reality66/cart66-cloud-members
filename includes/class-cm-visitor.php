@@ -83,18 +83,20 @@ class CM_Visitor {
         return self::$excluded_cats;
     }
 
-    public function load_access_list($force=false) {
-        if($force || !is_array(self::$access_list)) {
+    public function load_access_list( $force = false ) {
+        if ( $force || ! is_array( self::$access_list ) ) {
             $token = $this->get_token();
-            $lib = new CC_Library();
-            $access_list = $lib->get_memberships($token);
-            // CC_Log::write("Loaded access list: " . print_r($access_list, true));
-            $access_list = is_array($access_list) ? $access_list : array();
-            $this->set_access_list($access_list);
+
+            $cloud_visitor = new CM_Cloud_Visitor();
+            $access_list = $cloud_visitor->get_memberships( $token );
+            // CM_Log::write("Loaded access list: " . print_r($access_list, true));
+            $access_list = is_array( $access_list ) ? $access_list : array();
+            $this->set_access_list( $access_list );
         }
         else {
             // CC_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r(self::$access_list, true));
         }
+
         return $access_list;
     }
 
@@ -131,9 +133,9 @@ class CM_Visitor {
 
     public function check_remote_login() {
         if ( isset( $_GET['cc_customer_token'] ) && isset( $_GET['cc_customer_first_name'] ) ) {
-            $token = cc_get('cc_customer_token', 'text_field');
-            $name = cc_get('cc_customer_first_name', 'text_field');
-            $this->log_in($token, $name);
+            $token = cc_get( 'cc_customer_token', 'text_field' );
+            $name = cc_get( 'cc_customer_first_name', 'text_field' );
+            $this->log_in( $token, $name );
             $this->sign_in_redirect();
         }
     }
