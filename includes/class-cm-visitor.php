@@ -150,7 +150,7 @@ class CM_Visitor {
             $cloud = new CC_Cloud_API_V1();
             $order_history_url = $cloud->subdomain_url();
             CM_Log::write( "Sign in redirect to order history: $order_history_url" );
-            wp_redirect( $url );
+            wp_redirect( $order_history_url );
             exit();
         }
         elseif ( $page_id != $member_home ) {
