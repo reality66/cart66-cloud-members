@@ -85,6 +85,7 @@ if ( ! class_exists('Cart66_Members') ) {
         }
 
         public function register_actions() {
+
             // Initialize core classes
             add_action( 'init', array( $this, 'init' ), 0 );
             add_action( 'activated_plugin', 'cm_save_activation_error' );
@@ -108,6 +109,9 @@ if ( ! class_exists('Cart66_Members') ) {
             // Check if current visitor is logged signed in to the cloud
             $visitor = new CM_Visitor();
             add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );
+
+            // Register the account widget
+            add_action('widgets_init', create_function('', 'return register_widget("CM_Account_Widget");'));
         }
 
         public function init() {

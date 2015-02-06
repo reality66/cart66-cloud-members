@@ -38,7 +38,7 @@ class CM_Visitor {
         if( ! is_array( self::$restricted_cats ) ) {
             // Calling get_options because we want the entire array of all the restricted categories
             self::$restricted_cats = CC_Admin_Setting::get_options( 'cart66_members_restrictions' );
-            CM_Log::write( 'Loaded restricted categories: ' . print_r( self::$restricted_cats, true ) );
+            // CM_Log::write( 'Loaded restricted categories: ' . print_r( self::$restricted_cats, true ) );
         }
     }
 
@@ -135,13 +135,13 @@ class CM_Visitor {
         if ( isset( $_GET['cc_customer_token'] ) && isset( $_GET['cc_customer_first_name'] ) ) {
             $token = cc_get( 'cc_customer_token', 'text_field' );
             $name = cc_get( 'cc_customer_first_name', 'text_field' );
-            $this->log_in( $token, $name );
+            $this->sign_in( $token, $name );
             $this->sign_in_redirect();
         }
     }
 
     public function sign_in_redirect() {
-        $member_home = CC_Admin_Setting::get_option( 'cart66_memmbers_notificaitons', 'member_home' );
+        $member_home = CC_Admin_Setting::get_option( 'cart66_members_notifications', 'member_home' );
         $page_id = get_queried_object_id();
         CC_Log::write("Memeber home value: $member_home :: $page_id");
 
@@ -162,7 +162,7 @@ class CM_Visitor {
         }
     }
 
-    public function log_in( $token, $name ) {
+    public function sign_in( $token, $name ) {
         $expire = 0; // Expire cookie at end of session
         $data = $token . '~' . $name;
         $_COOKIE['ccm_token'] = $data;
@@ -178,7 +178,9 @@ class CM_Visitor {
     /**
      * Remove the member token cookie and set the token to false.
      */
-    public function log_out() {
+    public function sign_out() {
+        CM_Log::write('attempting to log out and drop the ccm_token');
+
         self::$token = false;
         unset( $_COOKIE['ccm_token'] );
 	    setcookie('ccm_token', ' ', time() - 3600, COOKIEPATH);
