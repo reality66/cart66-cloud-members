@@ -11,7 +11,8 @@ class CM_Log {
     }
 
     public static function write( $data ) {
-        if ( defined( 'CC_DEBUG' ) && CC_DEBUG ) {
+        $debug = CC_Admin_Setting::get_option( 'cart66_main_settings', 'debug');
+        if ( 'on' == $debug ) {
             self::init();
             $backtrace = debug_backtrace();
             $file = $backtrace[0]['file'];
