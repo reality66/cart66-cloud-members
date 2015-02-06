@@ -71,10 +71,12 @@ class CM_Monitor {
     public function filter_pages( $pages ) {
         // CM_Log::write('Filtering pages :: count: ' . count($pages));
         for ( $i=0; $i < count( $pages ); $i++ ) {
-            $page = $pages[ $i ];
-            $visitor = new CM_Visitor();
-            if ( ! $visitor->can_view_link( $page->ID ) ) {
-                unset( $pages[ $i ] );
+            if ( isset( $pages[ $i ] ) ) {
+                $page = $pages[ $i ];
+                $visitor = new CM_Visitor();
+                if ( ! $visitor->can_view_link( $page->ID ) ) {
+                    unset( $pages[ $i ] );
+                }
             }
         }
 

@@ -49,6 +49,7 @@ class CM_Cloud_Visitor {
             $url = self::$cloud->api . "memberships/$token";
             $headers = array( 'Accept' => 'application/json' );
             $response = wp_remote_get( $url, self::$cloud->basic_auth_header( $headers ) );
+
             if( self::$cloud->response_ok( $response ) ) {
                 $json = $response['body'];
                 $all = json_decode( $json, true );
@@ -62,7 +63,8 @@ class CM_Cloud_Visitor {
                     }
                 }
             }
-            CC_Log::write( "$url\nReceived membership list: " . print_r( $memberships, true ) );
+
+            // CC_Log::write( "$url\nReceived membership list: " . print_r( $memberships, true ) );
         }
 
         return $memberships;
