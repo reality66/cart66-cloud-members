@@ -6,7 +6,7 @@
         <?php echo $logged_in_message; ?>
       </div>
 
-      <ul class="cm-cart-widget-links">
+      <ul class="cm-account-widget-links">
         <?php if($history_url): ?>
           <li class="cm-history-url">
             <a class="cm-account-widget-history" href="<?php echo $history_url; ?>" rel="nofollow"><?php _e('Order History', 'cart66-members'); ?></a>

@@ -103,16 +103,23 @@ if ( ! class_exists('Cart66_Members') ) {
 
                 // Remove content from restricted pages
                 add_filter( 'the_content', array( $monitor, 'restrict_pages' ) );
-                add_filter( 'the_posts',   array( $monitor, 'filter_posts' ) );
+
+                $post_filter = CC_Admin_Setting::get_option( 'cart66_members_notifications', 'post_filter' );
+                CM_Log::write( 'Post filter value: ' . $post_filter );
+
+                if ( 'remove' == $post_filter ) {
+                    // Remove unauthorized posts from ever being displayed
+                    add_filter( 'the_posts',   array( $monitor, 'filter_posts' ) );
+                    
+                    // Remove restricted categores from the category widget
+                    add_filter( 'widget_categories_args', array( $monitor, 'filter_category_widget' ), 10, 2 );
+                }
 
                 // Filter restricted pages that are not part of nav menus
                 add_filter( 'get_pages',          array( $monitor, 'filter_pages' ) );
                 add_filter( 'nav_menu_css_class', array( $monitor, 'filter_menus' ), 10, 2 );
                 add_action( 'wp_enqueue_scripts', array( $monitor, 'enqueue_css' ) );
 
-                // Remove restricted categores from the category widget
-                add_filter( 'widget_categories_args', array( $monitor, 'filter_category_widget' ), 10, 2 );
-                
                 // Check if current visitor is logged signed in to the cloud
                 $visitor = new CM_Visitor();
                 add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );
