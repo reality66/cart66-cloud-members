@@ -37,9 +37,12 @@ if ( ! class_exists('Cart66_Members') ) {
     elseif (isset($mu_plugin)) { $plugin_file = $mu_plugin; }
     elseif (isset($network_plugin)) { $plugin_file = $network_plugin; }
 
+    // Define constants
+    define( 'CM_VERSION_NUMBER', '1.0' );
     define( 'CM_PLUGIN_FILE', $plugin_file );
     define( 'CM_PATH', WP_PLUGIN_DIR . '/' . basename(dirname($plugin_file)) . '/' );
     define( 'CM_URL',  WP_PLUGIN_URL . '/' . basename(dirname($plugin_file)) . '/' );
+    define( 'CM_UPDATE_URL', 'http://staging.cart66.com/add-ons/cart66-members-info.txt' );
     define( 'CM_DEBUG', true );
 
     include_once CM_PATH . 'includes/cm-functions.php';
@@ -74,8 +77,6 @@ if ( ! class_exists('Cart66_Members') ) {
         }
 
         public function __construct() {
-            // Define constants
-            define( 'CM_VERSION_NUMBER', $this->version_number() );
 
             // Register autoloader
             spl_autoload_register( array( $this, 'class_loader' ) );
@@ -123,8 +124,11 @@ if ( ! class_exists('Cart66_Members') ) {
                 // Check if current visitor is logged signed in to the cloud
                 $visitor = new CM_Visitor();
                 add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );
-            }
 
+            }
+        
+            // Register plugin updater
+            add_action( 'init', 'cm_updater_init' );
         }
 
         public function init() {
@@ -155,21 +159,6 @@ if ( ! class_exists('Cart66_Members') ) {
             }
         }
 
-
-        /**
-         * Get the plugin version number from the header comments
-         *
-         * @return string
-         */
-        public function version_number() {
-            if(!function_exists('get_plugin_data')) {
-              require_once(ABSPATH . 'wp-admin/includes/plugin.php');
-            }
-
-            $plugin_data = get_plugin_data(CM_PLUGIN_FILE);
-            return $plugin_data['Version'];
-        }
-
     }
 
 }
@@ -177,4 +166,3 @@ if ( ! class_exists('Cart66_Members') ) {
 if( $cm_requirements_met ) {
     Cart66_Members::instance();
 }
-
