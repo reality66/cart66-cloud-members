@@ -340,7 +340,7 @@ class CM_Visitor {
      */
     public function has_permission( array $memberships, $days_in=0 ) {
         $access_list = $this->get_access_list();
-        // CC_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
+        CC_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
         foreach ( $memberships as $sku ) {
             foreach ( $access_list as $item ) {
                 $days_active = is_numeric( $item['days_in'] ) ? $item['days_in'] : 0;
@@ -352,6 +352,7 @@ class CM_Visitor {
                 }
             }
         }
+
         return false;
     }
 

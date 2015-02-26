@@ -88,7 +88,7 @@ class CM_Shortcode_Manager {
                 }
                 else {
                     $visitor = new CM_Visitor();
-                    if( $visitor->has_permission( $member_id, $skus, $days_in ) ) {
+                    if( $visitor->has_permission( $skus, $days_in ) ) {
                         $in_group = true;
                         CM_Log::write( "Show to $member_id: " . print_r( $skus, true ) );
                     }
