@@ -340,7 +340,7 @@ class CM_Visitor {
      */
     public function has_permission( array $memberships, $days_in=0 ) {
         $access_list = $this->get_access_list();
-        CC_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
+        // CC_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
         foreach ( $memberships as $sku ) {
             foreach ( $access_list as $item ) {
                 $days_active = is_numeric( $item['days_in'] ) ? $item['days_in'] : 0;
@@ -363,10 +363,11 @@ class CM_Visitor {
      * in visitor. If not data could be retrieved, self::$user_data is set to an empty array.
      */
     public function get_user_data( $force_reload=false ) {
-        if ( ! is_array( self::$user_data ) || $force_reload ) {
+        if ( ! is_array( self::$user_data ) || count( self::$user_data ) == 0 || $force_reload ) {
             if ( $token = $this->get_token() ) {
                 CC_Log::write("Called load user data using token: $token");
                 self::$user_data = $this->get_cloud_user_data( $token );
+                CC_Log::write( 'Retrieve user data from the cloud: ' . print_r( self::$user_data, true ) );
             }
             else {
                 CC_Log::write('Not loading user data because nobody is logged in');
@@ -382,6 +383,7 @@ class CM_Visitor {
     public function get_first_name() {
         $first_name = '';
         $user_data = $this->get_user_data();
+        CC_Log::write( 'CM_Visitor::get_first_name: ' . print_r( $user_data, true ) );
         if ( isset( $user_data['first_name'] ) ) {
             $first_name = $user_data['first_name'];
         }
@@ -431,11 +433,14 @@ class CM_Visitor {
             $url = $cloud->api . "accounts/$token";
             $headers = array( 'Accept' => 'application/json' );
             $response = wp_remote_get( $url, $cloud->basic_auth_header( $headers ) );
-            CM_Log::write( 'Get user data response: ' . print_r($response, true) );
+            CC_Log::write( "Get user data response: $url  ::  " . print_r($response, true) );
             if( $cloud->response_ok( $response ) ) {
                 $json = $response['body'];
                 $user_data = json_decode( $json, true );
-                CM_Log::write( 'Received user data: ' . print_r($user_data, true) );
+                CC_Log::write( 'Received user data: ' . print_r($user_data, true) );
+            } else {
+                CC_Log::write( 'Failed to receive user data from the cloud: ' . print_r( $response, true ) );
+                wp_redirect( '/sign-out' );
             }
         }
 
