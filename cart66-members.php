@@ -37,9 +37,12 @@ if ( ! class_exists('Cart66_Members') ) {
     elseif (isset($mu_plugin)) { $plugin_file = $mu_plugin; }
     elseif (isset($network_plugin)) { $plugin_file = $network_plugin; }
 
+    // Define constants
+    define( 'CM_VERSION_NUMBER', '1.0' );
     define( 'CM_PLUGIN_FILE', $plugin_file );
     define( 'CM_PATH', WP_PLUGIN_DIR . '/' . basename(dirname($plugin_file)) . '/' );
     define( 'CM_URL',  WP_PLUGIN_URL . '/' . basename(dirname($plugin_file)) . '/' );
+    define( 'CM_UPDATE_URL', 'http://staging.cart66.com/add-ons/cart66-members-info.txt' );
     define( 'CM_DEBUG', true );
 
     include_once CM_PATH . 'includes/cm-functions.php';
@@ -74,20 +77,58 @@ if ( ! class_exists('Cart66_Members') ) {
         }
 
         public function __construct() {
-            // Define constants
-            define( 'CC_VERSION_NUMBER', $this->version_number() );
 
             // Register autoloader
             spl_autoload_register( array( $this, 'class_loader' ) );
 
             // Register action hooks
             $this->register_actions();
+
+            // Initialize shortcodes for managing access to content
+            CM_Shortcode_Manager::init();
         }
 
         public function register_actions() {
+
             // Initialize core classes
             add_action( 'init', array( $this, 'init' ), 0 );
+            add_action( 'activated_plugin', 'cm_save_activation_error' );
 
+            // Register the account widget
+            add_action('widgets_init', create_function('', 'return register_widget("CM_Account_Widget");'));
+
+            if ( ! is_admin() ) {
+                // Redirect to access denied page
+                $monitor = new CM_Monitor();
+                add_action( 'template_redirect', array( $monitor, 'access_denied_redirect' ) );
+
+                // Remove content from restricted pages
+                add_filter( 'the_content', array( $monitor, 'restrict_pages' ) );
+
+                $post_filter = CC_Admin_Setting::get_option( 'cart66_members_notifications', 'post_filter' );
+                CM_Log::write( 'Post filter value: ' . $post_filter );
+
+                if ( 'remove' == $post_filter ) {
+                    // Remove unauthorized posts from ever being displayed
+                    add_filter( 'the_posts',   array( $monitor, 'filter_posts' ) );
+                    
+                    // Remove restricted categores from the category widget
+                    add_filter( 'widget_categories_args', array( $monitor, 'filter_category_widget' ), 10, 2 );
+                }
+
+                // Filter restricted pages that are not part of nav menus
+                add_filter( 'get_pages',          array( $monitor, 'filter_pages' ) );
+                add_filter( 'nav_menu_css_class', array( $monitor, 'filter_menus' ), 10, 2 );
+                add_action( 'wp_enqueue_scripts', array( $monitor, 'enqueue_css' ) );
+
+                // Check if current visitor is logged signed in to the cloud
+                $visitor = new CM_Visitor();
+                add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );
+
+            }
+        
+            // Register plugin updater
+            add_action( 'init', 'cm_updater_init' );
         }
 
         public function init() {
@@ -110,25 +151,12 @@ if ( ! class_exists('Cart66_Members') ) {
                     include_once $root . 'includes/exception-library.php';
                 } elseif ( cc_starts_with( $class, 'cm_admin' ) ) {
                     include_once $root . 'includes/admin/' . $file;
+                } elseif ( cc_starts_with( $class, 'cm_cloud' ) ) {
+                    include_once $root . 'includes/cloud/' . $file;
                 } else {
                     include_once $root . 'includes/' . $file;
                 }
             }
-        }
-
-
-        /**
-         * Get the plugin version number from the header comments
-         *
-         * @return string
-         */
-        public function version_number() {
-            if(!function_exists('get_plugin_data')) {
-              require_once(ABSPATH . 'wp-admin/includes/plugin.php');
-            }
-
-            $plugin_data = get_plugin_data(CC_PLUGIN_FILE);
-            return $plugin_data['Version'];
         }
 
     }
@@ -138,4 +166,3 @@ if ( ! class_exists('Cart66_Members') ) {
 if( $cm_requirements_met ) {
     Cart66_Members::instance();
 }
-

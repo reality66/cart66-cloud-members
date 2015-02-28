@@ -18,8 +18,11 @@ class CM_Admin {
         self::$tabs = array( 'notifications', 'category-restrictions' );
         add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 
+        add_action( 'add_meta_boxes', array('CM_Admin_Memberships_MetaBox', 'add_memberships_box'), 20);
+        add_action( 'save_post',      array('CM_Admin_Memberships_MetaBox', 'save_membership_requirements'), 20);
+        
         CM_Admin_Settings_Notifications::init();
-        // CM_Admin_Settings_Restrictions::init();
+        CM_Admin_Settings_Restrictions::init();
     }
 
     public function add_menu_page() {
@@ -30,7 +33,7 @@ class CM_Admin {
         $capability = 'manage_options';
         $menu_slug = 'cart66_members';
         $options_page = add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, array($this, 'render') );
-        CC_Log::write( "Add submenu page value: $options_page" );
+        // CC_Log::write( "Add submenu page value: $options_page" );
     }
 
     public function render() {
