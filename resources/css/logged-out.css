@@ -1,4 +1,5 @@
 .cc_logged_in,
+.cm-signed-in,
 .cm-logged-in {
   display: none !important;
 }
