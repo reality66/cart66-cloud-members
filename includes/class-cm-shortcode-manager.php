@@ -10,6 +10,15 @@ class CM_Shortcode_Manager {
         add_shortcode('cm_visitor_last_name',    array('CM_Shortcode_Manager', 'cm_visitor_last_name'));
         add_shortcode('cm_visitor_email',        array('CM_Shortcode_Manager', 'cm_visitor_email'));
         add_shortcode('cm_visitor_phone_number', array('CM_Shortcode_Manager', 'cm_visitor_phone_number'));
+
+        // Include legacy shortcodes
+        add_shortcode('cc_show_to',              array('CM_Shortcode_Manager', 'cm_show_to'));
+        add_shortcode('cc_hide_from',            array('CM_Shortcode_Manager', 'cm_hide_from'));
+        add_shortcode('cc_visitor_name',         array('CM_Shortcode_Manager', 'cm_visitor_name'));
+        add_shortcode('cc_visitor_first_name',   array('CM_Shortcode_Manager', 'cm_visitor_first_name'));
+        add_shortcode('cc_visitor_last_name',    array('CM_Shortcode_Manager', 'cm_visitor_last_name'));
+        add_shortcode('cc_visitor_email',        array('CM_Shortcode_Manager', 'cm_visitor_email'));
+        add_shortcode('cc_visitor_phone_number', array('CM_Shortcode_Manager', 'cm_visitor_phone_number'));
     }
 
     public static function cm_visitor_name( $args, $content ) {
