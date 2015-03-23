@@ -27,7 +27,7 @@ class CM_Log {
     }
 
     public static function download() {
-        self:init();
+        self::init();
         $data = 'The cart66 log file contains no data';
 
         if ( file_exists( self::$log_file ) ) {
