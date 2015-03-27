@@ -145,7 +145,7 @@ class CM_Visitor {
         $page_id = get_queried_object_id();
         CC_Log::write("Memeber home value: $member_home :: $page_id");
 
-        if ( empty( $member_home ) ) {
+        if ( empty( $member_home ) || 'order_history' == $member_home ) {
             // redirect to order history
             $cloud = new CC_Cloud_API_V1();
             $order_history_url = $cloud->subdomain_url();
