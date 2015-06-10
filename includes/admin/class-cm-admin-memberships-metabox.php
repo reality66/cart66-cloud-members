@@ -85,9 +85,11 @@ class CM_Admin_Memberships_Metabox {
         $found_orphans = false;
         $cloud_skus = array();
 
-        foreach( $memberships as $name => $sku ) {
-            $cloud_skus[] = $sku;
-        }
+		if ( is_array ( $memberships ) ) {
+			foreach( $memberships as $name => $sku ) {
+				$cloud_skus[] = $sku;
+			}
+		}
 
         if ( is_array( $requirements ) ) {
             foreach( $requirements as $key => $sku ) {
