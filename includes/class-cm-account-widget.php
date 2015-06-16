@@ -15,8 +15,8 @@ class CM_Account_Widget extends WP_Widget {
     /**
      * The form in the WordPress admin for configuring the widget
      */
-    public function form($instance) {
-        $defaults = array(
+    public function form ( $instance ) {
+        $defaults = array (
             'title' => __( 'My Account', 'cart66-members' ), 
             'logged_out_message' => __( 'Please sign in', 'cart66-members' ),
             'logged_in_message' => 'Welcome %name%',
@@ -30,7 +30,7 @@ class CM_Account_Widget extends WP_Widget {
         $history = $instance['show_link_history'] == 1 ? 'checked="checked"' : '';
         $profile = $instance['show_link_profile'] == 1 ? 'checked="checked"' : '';
 
-        $data = array(
+        $data = array (
             'widget' => $this,
             'title' => $title,
             'logged_out_message' => $logged_out_message,
@@ -90,6 +90,10 @@ class CM_Account_Widget extends WP_Widget {
     }
 
     public static function ajax_render_content() {
+		$widget = new CM_Account_Widget();
+		$settings = array_shift ( $widget->get_settings() );
+		// CM_Log::write ( 'Widget settings: ' . print_r ( $settings, true ) );
+
         $url = new CC_Cloud_Url();
         $history_url = ( $_POST['show_link_history'] == 1 ) ? $url->order_history() : false;
         $profile_url = ( $_POST['show_link_profile'] == 1 ) ? $url->profile() : false;
@@ -99,16 +103,22 @@ class CM_Account_Widget extends WP_Widget {
         $sign_out_url = $home_url . '/sign-out';
 
         $visitor = new CM_Visitor();
-        $logged_in_message = str_replace('%name%', '<span class="cc_visitor_name">' . $visitor->get_token('name') . '</span>', cc_post( 'logged_in_message', 'text_field' ) );
+		$logged_in_message = str_replace(
+			'%name%', 
+			'<span class="cc_visitor_name">' . $visitor->get_token('name') . '</span>', 
+			$settings['logged_in_message']
+	   	);
+		$logged_out_message = $settings['logged_out_message'];
 
+		
         $data = array(
-            'history_url' => $history_url,
-            'profile_url' => $profile_url,
-            'sign_in_url' => $sign_in_url,
+            'history_url'  => $history_url,
+            'profile_url'  => $profile_url,
+            'sign_in_url'  => $sign_in_url,
             'sign_out_url' => $sign_out_url,
             'is_logged_in' => $visitor->is_logged_in(),
-            'logged_out_message' => cc_get( 'logged_out_message', 'text-field' ),
-            'logged_in_message' => $logged_in_message,
+            'logged_out_message' => $logged_out_message,
+            'logged_in_message'  => $logged_in_message,
         );
 
         $view = CC_View::get(CM_PATH . 'views/widget/html-account-sidebar-content.php', $data);
