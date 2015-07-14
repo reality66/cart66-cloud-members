@@ -31,7 +31,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists('Cart66_Members') ) {
 
-    $cm_requirements_met = true;
     $plugin_file = __FILE__;
     if(isset($plugin)) { $plugin_file = $plugin; }
     elseif (isset($mu_plugin)) { $plugin_file = $mu_plugin; }
@@ -44,13 +43,8 @@ if ( ! class_exists('Cart66_Members') ) {
     define( 'CM_URL',  WP_PLUGIN_URL . '/' . basename(dirname($plugin_file)) . '/' );
     define( 'CM_DEBUG', true );
 
+    // Include Cart66 Cloud Members helper functions
     include_once CM_PATH . 'includes/cm-functions.php';
-
-    // Cart66 Members requires Cart66 Cloud
-    if ( ! class_exists( 'Cart66_Cloud' ) ) {
-        add_action( 'admin_notices', 'cart66_cloud_required_notice' );
-        $cm_requirements_met = false;
-    }
 
     /**
      * Cart66 Members main class
@@ -76,15 +70,45 @@ if ( ! class_exists('Cart66_Members') ) {
         }
 
         public function __construct() {
-
             // Register autoloader
             spl_autoload_register( array( $this, 'class_loader' ) );
 
-            // Register action hooks
-            $this->register_actions();
+            // Check to see if Cart66 Cloud is installed
+            add_action( 'plugins_loaded', array( $this, 'dependency_check' ) );
 
-            // Initialize shortcodes for managing access to content
-            CM_Shortcode_Manager::init();
+            // Initialize plugin
+            add_action( 'init', array( $this, 'initialize' ) );
+        }
+
+        public function dependency_check() {
+            $check = true;
+
+            if ( ! class_exists('Cart66_Cloud') ) {
+                add_action( 'admin_notices', 'cart66_cloud_required_notice' );
+                $check = false;
+            }
+
+            CM_Flash_Data::set( 'dependency_check', $check );
+        }
+
+        public function initialize() {
+            if ( CM_Flash_Data::get('dependency_check') ) {
+                do_action( 'before_cart66_members_init' );
+                CM_Log::write('Initializing Cart66 Cloud Members plugin');
+
+                // Register action hooks
+                $this->register_actions();
+
+                // Initialize admin
+                if( is_admin() ) {
+                    CM_Admin::init();
+                }
+
+                // Initialize shortcodes for managing access to content
+                CM_Shortcode_Manager::init();
+
+                do_action ( 'after_cart66_members_init' );
+            }
         }
 
         public function register_actions() {
@@ -130,27 +154,17 @@ if ( ! class_exists('Cart66_Members') ) {
             add_action( 'init', 'cm_updater_init' );
         }
 
-        public function init() {
-            do_action( 'before_cart66_members_init' );
-
-            if( is_admin() ) {
-                CM_Admin::init();
-            }
-
-            do_action ( 'after_cart66_members_init' );
-        }
-
         public static function class_loader($class) {
-            if(cc_starts_with($class, 'CM_')) {
+            if(cm_starts_with($class, 'CM_')) {
                 $class = strtolower($class);
                 $file = 'class-' . str_replace( '_', '-', $class ) . '.php';
                 $root = CM_PATH;
 
-                if(cc_starts_with($class, 'cm_exception')) {
+                if(cm_starts_with($class, 'cm_exception')) {
                     include_once $root . 'includes/exception-library.php';
-                } elseif ( cc_starts_with( $class, 'cm_admin' ) ) {
+                } elseif ( cm_starts_with( $class, 'cm_admin' ) ) {
                     include_once $root . 'includes/admin/' . $file;
-                } elseif ( cc_starts_with( $class, 'cm_cloud' ) ) {
+                } elseif ( cm_starts_with( $class, 'cm_cloud' ) ) {
                     include_once $root . 'includes/cloud/' . $file;
                 } else {
                     include_once $root . 'includes/' . $file;
@@ -162,6 +176,4 @@ if ( ! class_exists('Cart66_Members') ) {
 
 }
 
-if( $cm_requirements_met ) {
-    Cart66_Members::instance();
-}
+Cart66_Members::instance();
