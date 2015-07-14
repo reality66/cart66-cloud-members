@@ -78,12 +78,17 @@ if ( ! class_exists('Cart66_Members') ) {
 
             // Initialize plugin
             add_action( 'init', array( $this, 'initialize' ) );
+
         }
 
         public function dependency_check() {
             $check = true;
 
-            if ( ! class_exists('Cart66_Cloud') ) {
+            if ( class_exists('Cart66_Cloud') ) {
+                // If Cart66 Cloud is loaded register the account widget
+                add_action('widgets_init', create_function('', 'return register_widget("CM_Account_Widget");'));
+            } else {
+                // If Cart66 Cloud is not loaded show and admin notice
                 add_action( 'admin_notices', 'cart66_cloud_required_notice' );
                 $check = false;
             }
@@ -116,9 +121,6 @@ if ( ! class_exists('Cart66_Members') ) {
             // Initialize core classes
             add_action( 'init', array( $this, 'init' ), 0 );
             add_action( 'activated_plugin', 'cm_save_activation_error' );
-
-            // Register the account widget
-            add_action('widgets_init', create_function('', 'return register_widget("CM_Account_Widget");'));
 
             if ( ! is_admin() ) {
                 // Redirect to access denied page

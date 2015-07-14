@@ -76,6 +76,10 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 
 == Changelog ==
 
+= Version 1.0.7 - 7/14/2015 =
+
+* Improve handling when Cart66 Cloud is not installed and activated
+
 = Version 1.0.6 - 4/16/2015 =
 
 * Fix account widget not displaying custom text

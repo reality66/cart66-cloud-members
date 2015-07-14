@@ -3,6 +3,7 @@
 class CM_Account_Widget extends WP_Widget {
 
     public function __construct() {
+        CM_Log::write('Construct CM_Account_Widget');
         $description = __( 'Customer account widget', 'cart66-members' );
         $widget_ops = array('classname' => 'CM_Account_Widget', 'description' => $description );
         $this->WP_Widget('CM_Account_Widget', 'Cart66 Cloud Accounts', $widget_ops);
@@ -16,6 +17,8 @@ class CM_Account_Widget extends WP_Widget {
      * The form in the WordPress admin for configuring the widget
      */
     public function form ( $instance ) {
+        if ( ! class_exists('Cart66_Cloud') ) { return; }
+
         $defaults = array (
             'title' => __( 'My Account', 'cart66-members' ), 
             'logged_out_message' => __( 'Please sign in', 'cart66-members' ),
@@ -59,6 +62,7 @@ class CM_Account_Widget extends WP_Widget {
      * Render the content of the widget
      */
     public function widget( $args, $instance ) {
+        if ( ! class_exists('Cart66_Cloud') ) { return; }
 
         // Enqueue and localize javascript for rendering ajax cart widget content
         wp_enqueue_script('cm_ajax_account_widget', CM_URL . 'resources/js/account-widget.js');
@@ -90,6 +94,8 @@ class CM_Account_Widget extends WP_Widget {
     }
 
     public static function ajax_render_content() {
+        if ( ! class_exists('Cart66_Cloud') ) { return; }
+
 		$widget = new CM_Account_Widget();
 		$settings = array_shift ( $widget->get_settings() );
 		// CM_Log::write ( 'Widget settings: ' . print_r ( $settings, true ) );

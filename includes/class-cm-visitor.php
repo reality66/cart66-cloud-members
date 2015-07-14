@@ -15,7 +15,7 @@ class CM_Visitor {
     }
 
     public function set_access_list( array $list ) {
-        // CC_Log::write('Setting logged in vistor access list :: ' . print_r($list, true));
+        // CM_Log::write('Setting logged in vistor access list :: ' . print_r($list, true));
         self::$access_list = $list;
     }
 
@@ -35,10 +35,12 @@ class CM_Visitor {
      * )
      */
     public function load_restricted_cats() {
-        if( ! is_array( self::$restricted_cats ) ) {
-            // Calling get_options because we want the entire array of all the restricted categories
-            self::$restricted_cats = CC_Admin_Setting::get_options( 'cart66_members_restrictions' );
-            // CM_Log::write( 'Loaded restricted categories: ' . print_r( self::$restricted_cats, true ) );
+        if ( class_exists('Cart66_Cloud') ) {
+            if( ! is_array( self::$restricted_cats ) ) {
+                // Calling get_options because we want the entire array of all the restricted categories
+                self::$restricted_cats = CC_Admin_Setting::get_options( 'cart66_members_restrictions' );
+                // CM_Log::write( 'Loaded restricted categories: ' . print_r( self::$restricted_cats, true ) );
+            }
         }
     }
 
@@ -66,7 +68,7 @@ class CM_Visitor {
             if ( $categories && ! isset( $categories['errors'] ) ) {
                 foreach( $categories as $cat ) {
                     if( ! $this->can_view_post_category( $cat->cat_ID ) ) {
-                        // CC_Log::write("Looping and Excluding category id: " . $cat->cat_ID);
+                        // CM_Log::write("Looping and Excluding category id: " . $cat->cat_ID);
                         self::$excluded_cats[] = $cat->cat_ID;
                     }
                 }
@@ -79,7 +81,7 @@ class CM_Visitor {
         if( ! is_array( self::$excluded_cats ) ) {
             $this->load_excluded_category_ids();
         }
-        // CC_Log::write('Returning excluded category ids: ' . print_r(self::$excluded_cats, TRUE));
+        // CM_Log::write('Returning excluded category ids: ' . print_r(self::$excluded_cats, TRUE));
         return self::$excluded_cats;
     }
 
@@ -94,7 +96,7 @@ class CM_Visitor {
             $this->set_access_list( $access_list );
         }
         else {
-            // CC_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r(self::$access_list, true));
+            // CM_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r(self::$access_list, true));
         }
 
         return $access_list;
@@ -132,18 +134,22 @@ class CM_Visitor {
     }
 
     public function check_remote_login() {
-        if ( isset( $_GET['cc_customer_token'] ) && isset( $_GET['cc_customer_first_name'] ) ) {
-            $token = cc_get( 'cc_customer_token', 'text_field' );
-            $name = cc_get( 'cc_customer_first_name', 'text_field' );
-            $this->sign_in( $token, $name );
-            $this->sign_in_redirect();
+        if ( class_exists('Cart66_Cloud') ) {
+            if ( isset( $_GET['cc_customer_token'] ) && isset( $_GET['cc_customer_first_name'] ) ) {
+                $token = cc_get( 'cc_customer_token', 'text_field' );
+                $name = cc_get( 'cc_customer_first_name', 'text_field' );
+                $this->sign_in( $token, $name );
+                $this->sign_in_redirect();
+            }
         }
     }
 
     public function sign_in_redirect() {
+        if (! class_exists('Cart66_Cloud') ) { return; }
+
         $member_home = CC_Admin_Setting::get_option( 'cart66_members_notifications', 'member_home' );
         $page_id = get_queried_object_id();
-        CC_Log::write("Memeber home value: $member_home :: $page_id");
+        CM_Log::write("Memeber home value: $member_home :: $page_id");
 
         if ( empty( $member_home ) || 'order_history' == $member_home ) {
             // redirect to order history
@@ -170,7 +176,7 @@ class CM_Visitor {
         setcookie('ccm_token', $data, $expire, COOKIEPATH, COOKIE_DOMAIN, false, true);
         if (COOKIEPATH != SITECOOKIEPATH) {
             setcookie('ccm_token', $data, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, false, true);
-            CC_Log::write("Logging in CC Member: $data");
+            CM_Log::write("Logging in CC Member: $data");
         }
         $this->load_access_list( true ); // Force the reloading of the access list even if already set
     }
@@ -209,20 +215,22 @@ class CM_Visitor {
      * @return string
      */
     public function get_token( $type='token' ) {
-        $allowed = array('full', 'token', 'name');
-        if ( ! in_array( $type, $allowed ) ) {
-            throw new CC_Exception( "Invalid token type requested: $type" );
-        }
+        if ( class_exists('Cart66_Cloud') ) {
+            $allowed = array('full', 'token', 'name');
+            if ( ! in_array( $type, $allowed ) ) {
+                throw new CC_Exception( "Invalid token type requested: $type" );
+            }
 
-        $data = '';
-        if ( self::$token ) {
-            list( $token, $name ) = explode('~', self::$token);
-            $data = array(
-                'full' => self::$token,
-                'token' => $token,
-                'name' => $name
-            );
-            $data = $data[$type];
+            $data = '';
+            if ( self::$token ) {
+                list( $token, $name ) = explode('~', self::$token);
+                $data = array(
+                    'full' => self::$token,
+                    'token' => $token,
+                    'name' => $name
+                );
+                $data = $data[$type];
+            }
         }
 
         return $data;
@@ -257,7 +265,7 @@ class CM_Visitor {
             }
         }
         else {
-            //CC_Log::write('Can view link because there are no restrictions on this post');
+            //CM_Log::write('Can view link because there are no restrictions on this post');
             $view = true;
         }
 
@@ -277,7 +285,7 @@ class CM_Visitor {
         $memberships = get_post_meta( $post_id, '_ccm_required_memberships', true );
         $post_cat_ids = wp_get_post_categories( $post_id );
 
-        // CC_Log::write("Categories for post id $post_id" . print_r($post_cat_ids, TRUE));
+        // CM_Log::write("Categories for post id $post_id" . print_r($post_cat_ids, TRUE));
 
         // Check if visitor may view the post category
         if ( count( $post_cat_ids ) > 0 ) {
@@ -293,7 +301,7 @@ class CM_Visitor {
 
         if( $allow ) {
             if ( is_array( $memberships ) && count( $memberships ) ) {
-                // CC_Log::write('This post requires memberships: ' . print_r($memberships, true));
+                // CM_Log::write('This post requires memberships: ' . print_r($memberships, true));
                 $allow = false; // only grant permission to logged in visitors with active subscriptions
                 if ( $this->is_logged_in() ) {
                     $days_in = get_post_meta($post_id, '_ccm_days_in', true);
@@ -316,7 +324,7 @@ class CM_Visitor {
     }
 
     public function can_view_post_category( $cat_id ) {
-        // CC_Log::write("Checking permission for category id: $cat_id");
+        // CM_Log::write("Checking permission for category id: $cat_id");
         $allow = TRUE;
 
         if ( is_array( self::$restricted_cats ) && isset( self::$restricted_cats[ $cat_id ] ) ) {
@@ -325,7 +333,7 @@ class CM_Visitor {
         }
 
         // $dbg = $allow ? "Granting permission for category id: $cat_id" : "Denying permission for category id: $cat_id";
-        // CC_Log::write($dbg);
+        // CM_Log::write($dbg);
 
         return $allow;
     }
@@ -340,14 +348,14 @@ class CM_Visitor {
      */
     public function has_permission( array $memberships, $days_in=0 ) {
         $access_list = $this->get_access_list();
-        // CC_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
+        // CM_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
         foreach ( $memberships as $sku ) {
             foreach ( $access_list as $item ) {
                 $days_active = is_numeric( $item['days_in'] ) ? $item['days_in'] : 0;
                 $days_in = is_numeric( $days_in ) ? $days_in : 0;
-                // CC_Log::write("Days in: $days_in <=> Days active: $days_active");
+                // CM_Log::write("Days in: $days_in <=> Days active: $days_active");
                 if ( $sku == $item['sku'] && $days_in <= $days_active ) {
-                    CC_Log::write("Permission ok: $sku :: Days in: $days_in :: " . $item['days_in']);
+                    CM_Log::write("Permission ok: $sku :: Days in: $days_in :: " . $item['days_in']);
                     return true;
                 }
             }
@@ -365,16 +373,16 @@ class CM_Visitor {
     public function get_user_data( $force_reload=false ) {
         if ( ! is_array( self::$user_data ) || count( self::$user_data ) == 0 || $force_reload ) {
             if ( $token = $this->get_token() ) {
-                CC_Log::write("Called load user data using token: $token");
+                CM_Log::write("Called load user data using token: $token");
                 self::$user_data = $this->get_cloud_user_data( $token );
-                CC_Log::write( 'Retrieve user data from the cloud: ' . print_r( self::$user_data, true ) );
+                CM_Log::write( 'Retrieve user data from the cloud: ' . print_r( self::$user_data, true ) );
             }
             else {
-                CC_Log::write('Not loading user data because nobody is logged in');
+                CM_Log::write('Not loading user data because nobody is logged in');
             }
         }
         else {
-            CC_Log::write('Reusing user data');
+            CM_Log::write('Reusing user data');
         }
 
         return self::$user_data;
@@ -383,7 +391,7 @@ class CM_Visitor {
     public function get_first_name() {
         $first_name = '';
         $user_data = $this->get_user_data();
-        CC_Log::write( 'CM_Visitor::get_first_name: ' . print_r( $user_data, true ) );
+        CM_Log::write( 'CM_Visitor::get_first_name: ' . print_r( $user_data, true ) );
         if ( isset( $user_data['first_name'] ) ) {
             $first_name = $user_data['first_name'];
         }
@@ -429,17 +437,17 @@ class CM_Visitor {
         $user_data = array();
 
         if ( !empty( $token ) && strlen( $token ) > 3 ) {
-            $cloud = new CC_Cloud_API_V1();
+            $cloud = new CM_Cloud_API_V1();
             $url = $cloud->api . "accounts/$token";
             $headers = array( 'Accept' => 'application/json' );
             $response = wp_remote_get( $url, $cloud->basic_auth_header( $headers ) );
-            CC_Log::write( "Get user data response: $url  ::  " . print_r($response, true) );
+            CM_Log::write( "Get user data response: $url  ::  " . print_r($response, true) );
             if( $cloud->response_ok( $response ) ) {
                 $json = $response['body'];
                 $user_data = json_decode( $json, true );
-                CC_Log::write( 'Received user data: ' . print_r($user_data, true) );
+                CM_Log::write( 'Received user data: ' . print_r($user_data, true) );
             } else {
-                CC_Log::write( 'Failed to receive user data from the cloud: ' . print_r( $response, true ) );
+                CM_Log::write( 'Failed to receive user data from the cloud: ' . print_r( $response, true ) );
                 wp_redirect( '/sign-out' );
             }
         }

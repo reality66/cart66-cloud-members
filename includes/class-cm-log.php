@@ -11,17 +11,19 @@ class CM_Log {
     }
 
     public static function write( $data ) {
-        $debug = CC_Admin_Setting::get_option( 'cart66_main_settings', 'debug');
-        if ( 'on' == $debug ) {
-            self::init();
-            $backtrace = debug_backtrace();
-            $file = $backtrace[0]['file'];
-            $line = $backtrace[0]['line'];
-            $date = current_time('m/d/Y g:i:s A') . ' ' . get_option('timezone_string');
-            $out = "========== $date ==========\nFile: $file" . ' :: Line: ' . $line . "\n$data";
+        if ( class_exists('Cart66_Cloud') ) {
+            $debug = CC_Admin_Setting::get_option( 'cart66_main_settings', 'debug');
+            if ( 'on' == $debug ) {
+                self::init();
+                $backtrace = debug_backtrace();
+                $file = $backtrace[0]['file'];
+                $line = $backtrace[0]['line'];
+                $date = current_time('m/d/Y g:i:s A') . ' ' . get_option('timezone_string');
+                $out = "========== $date ==========\nFile: $file" . ' :: Line: ' . $line . "\n$data";
 
-            if( is_writable( CM_PATH ) ) {
-                file_put_contents( self::$log_file, $out . "\n\n", FILE_APPEND );
+                if( is_writable( CM_PATH ) ) {
+                    file_put_contents( self::$log_file, $out . "\n\n", FILE_APPEND );
+                }
             }
         }
     }
