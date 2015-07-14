@@ -8,8 +8,13 @@ function cart66_cloud_required_notice() {
     <?php
 }
 
+function cm_starts_with( $haystack, $needle ) {
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+}
+
 function cm_save_activation_error() {
-    CC_Log::write( 'Activation error information for Cart66 Members: ' . ob_get_contents() );
+    CM_Log::write( 'Activation error information for Cart66 Members: ' . ob_get_contents() );
 }
 
 function cm_updater_init() {
