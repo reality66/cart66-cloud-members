@@ -32,10 +32,16 @@ class CM_Monitor {
         if( ! $visitor->can_view_post( $post->ID ) ) {
             $settings = CC_Admin_Setting::get_options( 'cart66_members_notifications' );
             if ( $visitor->is_logged_in() ) {
-                $the_content = $settings['not_included'];
+                $the_content = __('This content is not included with your membership', 'cart66-members');
+                if ( isset( $settings['not_included'] ) ) {
+                    $the_content = $settings['not_included'];
+                }
             }
             else {
-                $the_content = $settings['sign_in_required'];
+                $the_content = __('Please sign in to view this content', 'cart66-members');
+                if ( isset( $settings['sign_in_required'] ) ) {
+                    $the_content = $settings['sign_in_required'];
+                }
             }
         }
 

@@ -12,7 +12,7 @@ class CM_Admin_Memberships_Metabox {
         foreach($screens as $screen) {
             add_meta_box(
                 'ccm_membership_ids',
-                __('Membership Requirements', 'cart66_memberships'),
+                __('Membership Requirements', 'cart66-members'),
                 array(__CLASS__, 'render_memberships_box'),
                 $screen,
                 'side'

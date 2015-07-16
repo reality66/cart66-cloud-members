@@ -22,8 +22,8 @@ class CM_Admin_Settings_Restrictions extends CC_Admin_Setting {
         $option_values = self::get_options( $this->option_name );
 
         // Create the section for the cart66_main_settings section
-        $title = __( 'Restrict access to Post categories', 'cart66_members' );
-        $description = __( 'Select the memberships that are required in order to access posts for the listed categories.<br/>Do not select any memberships for categories open to the public', 'cart66_members' );
+        $title = __( 'Restrict access to Post categories', 'cart66-members' );
+        $description = __( 'Select the memberships that are required in order to access posts for the listed categories.<br/>Do not select any memberships for categories open to the public', 'cart66-members' );
         $section = new CC_Admin_Settings_Section( $title, $this->option_name );
         $section->description = $description;
 

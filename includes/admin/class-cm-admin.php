@@ -28,8 +28,8 @@ class CM_Admin {
     public function add_menu_page() {
         // Admin page for secure console
         $parent_slug = 'cart66';
-        $page_title = __( 'Cart66 Cloud Members', 'cart66_members' );
-        $menu_title = __( 'Members', 'cart66_members' );
+        $page_title = __( 'Cart66 Cloud Members', 'cart66-members' );
+        $menu_title = __( 'Members', 'cart66-members' );
         $capability = 'manage_options';
         $menu_slug = 'cart66_members';
         $options_page = add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, array($this, 'render') );
