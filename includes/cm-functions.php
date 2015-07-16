@@ -16,22 +16,3 @@ function cm_starts_with( $haystack, $needle ) {
 function cm_save_activation_error() {
     CM_Log::write( 'Activation error information for Cart66 Members: ' . ob_get_contents() );
 }
-
-function cm_updater_init() {
-
-	/* Load Plugin Updater */
-	require_once CM_PATH . 'includes/plugin-updater.php';
-
-	/* Updater Config */
-	$config = array(
-		'base'      => plugin_basename( CM_PLUGIN_FILE ), //required
-		'dashboard' => false,
-		'username'  => false,
-		'key'       => '',
-		'repo_uri'  => 'http://cart66.com',  //required
-		'repo_slug' => 'cart66-members',  //required
-	);
-
-	/* Load Updater Class */
-	new Cart66_Members_Plugin_Updater( $config );
-}

@@ -152,8 +152,6 @@ if ( ! class_exists('Cart66_Members') ) {
 
             }
         
-            // Register plugin updater
-            add_action( 'init', 'cm_updater_init' );
         }
 
         public static function class_loader($class) {
