@@ -149,7 +149,7 @@ class CM_Visitor {
 
         $member_home = CC_Admin_Setting::get_option( 'cart66_members_notifications', 'member_home' );
         $page_id = get_queried_object_id();
-        CM_Log::write("Memeber home value: $member_home :: $page_id");
+        CM_Log::write("Member home value: $member_home :: $page_id");
 
         if ( empty( $member_home ) || 'order_history' == $member_home ) {
             // redirect to order history
