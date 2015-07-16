@@ -97,7 +97,8 @@ class CM_Account_Widget extends WP_Widget {
         if ( ! class_exists('Cart66_Cloud') ) { return; }
 
 		$widget = new CM_Account_Widget();
-		$settings = array_shift ( $widget->get_settings() );
+        $widget_settings = $widget->get_settings();
+		$settings = array_shift ( $widget_settings );
 		// CM_Log::write ( 'Widget settings: ' . print_r ( $settings, true ) );
 
         $url = new CC_Cloud_Url();
