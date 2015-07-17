@@ -5,7 +5,7 @@ class CM_Monitor {
     protected $current_memberships = array();
 
     public function __construct() {
-        $this->current_memberships = array('basic');
+        $this->current_memberships = array();
     }
 
     public function access_denied_redirect() {
