@@ -3,8 +3,8 @@ Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
 Requires at least: 3.2
-Tested up to: 4.2.2
-Stable tag: 1.1.0
+Tested up to: 4.2.3
+Stable tag: 1.1.1
 
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -75,6 +75,10 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 4. Page editor meta box for requiring a membership to view the page (or post)
 
 == Changelog ==
+
+= Version 1.1.1 - 7/27/2015 =
+
+* Fix shortocodes for retrieving information about the logged in user
 
 = Version 1.1.0 - 7/17/2015 =
 

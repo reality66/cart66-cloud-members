@@ -437,7 +437,7 @@ class CM_Visitor {
         $user_data = array();
 
         if ( !empty( $token ) && strlen( $token ) > 3 ) {
-            $cloud = new CM_Cloud_API_V1();
+            $cloud = new CC_Cloud_API_V1();
             $url = $cloud->api . "accounts/$token";
             $headers = array( 'Accept' => 'application/json' );
             $response = wp_remote_get( $url, $cloud->basic_auth_header( $headers ) );
