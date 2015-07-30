@@ -16,3 +16,17 @@ function cm_starts_with( $haystack, $needle ) {
 function cm_save_activation_error() {
     CM_Log::write( 'Activation error information for Cart66 Members: ' . ob_get_contents() );
 }
+
+function cm_url() {
+    $url = CM_URL;
+    $request_protocol = is_ssl() ? 'https' : 'http';
+
+    if ( 'https' == $request_protocol ) {
+        $location = strpos( $url, ':' );
+        $default_protocol = substr( $url,  0, $location );
+        $remainder = substr( $url, $location ); 
+        $url = $request_protocol . $remainder;
+    }
+
+    return $url;
+}

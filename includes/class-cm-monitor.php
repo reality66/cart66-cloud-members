@@ -121,12 +121,12 @@ class CM_Monitor {
         $visitor = new CM_Visitor();
 
         if ( $visitor->is_logged_in() ) {
-            wp_enqueue_style('cm-logged-in', CM_URL . 'resources/css/logged-in.css');
+            wp_enqueue_style('cm-logged-in', cm_url() . 'resources/css/logged-in.css');
         } else {
-            wp_enqueue_style('cm-logged-out', CM_URL . 'resources/css/logged-out.css');
+            wp_enqueue_style('cm-logged-out', cm_url() . 'resources/css/logged-out.css');
         }
 
-        wp_enqueue_style('cm-members', CM_URL . 'resources/css/members.css');
+        wp_enqueue_style('cm-members', cm_url() . 'resources/css/members.css');
     }
 
 }

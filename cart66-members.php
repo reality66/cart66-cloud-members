@@ -3,7 +3,7 @@
 Plugin Name: Cart66 Cloud - Members
 Plugin URI: http://cart66.com
 Description: Membership functionality for Cart66 Cloud
-Version: 1.1.1
+Version: 1.1.2
 Author: Reality66
 Author URI: http://www.reality66.com
 
@@ -37,7 +37,7 @@ if ( ! class_exists('Cart66_Members') ) {
     elseif (isset($network_plugin)) { $plugin_file = $network_plugin; }
 
     // Define constants
-    define( 'CM_VERSION_NUMBER', '1.1.1' );
+    define( 'CM_VERSION_NUMBER', '1.1.2' );
     define( 'CM_PLUGIN_FILE', $plugin_file );
     define( 'CM_PATH', WP_PLUGIN_DIR . '/' . basename(dirname($plugin_file)) . '/' );
     define( 'CM_URL',  WP_PLUGIN_URL . '/' . basename(dirname($plugin_file)) . '/' );
