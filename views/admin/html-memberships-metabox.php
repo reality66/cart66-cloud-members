@@ -72,6 +72,6 @@
     <?php endif; ?>
 <?php else: ?>
     <div class="misc-pub-section" style="border-bottom: none;">
-    <?php _e('You do not have any memberships or subscriptions confiigured in your Cart66 Cloud account', 'cart66-members'); ?>
+    <?php _e('You do not have any memberships or subscriptions configured in your Cart66 Cloud account', 'cart66-members'); ?>
     </div>
 <?php endif; ?>
