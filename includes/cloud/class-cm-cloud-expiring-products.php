@@ -68,22 +68,24 @@ class CM_Cloud_Expiring_Products {
     public function load() {
         if( !empty( self::$expiring_products ) ) {
             $product_data = self::$expiring_products;
-            // CC_Log::write('Reusing expiring products rather than loading them again from the cloud.');
+            // CM_Log::write('Reusing expiring products rather than loading them again from the cloud.');
         }
         else {
-            // CC_Log::write('Loading expiring products from the cloud');
+            // CM_Log::write('Loading expiring products from the cloud');
             $url = self::$cloud->api . 'products/expiring';
             $headers = array('Accept' => 'application/json');
             $response = wp_remote_get( $url, self::$cloud->basic_auth_header( $headers ) );
+            CM_Log::write( "Loading expiring products from the cloud: $url" );
+            CM_Log::write( "Basic auth header: " . print_r( self::$cloud->basic_auth_header( $headers ), true ) );
 
             if( !self::$cloud->response_ok( $response ) ) {
-                CC_Log::write('[' . basename(__FILE__) . ' - line ' . __LINE__ . "] CC_Library::get_expiring_products failed: $url :: " . print_r($response, true));
+                CM_Log::write( "Loading expiring products failed: $url :: " . print_r($response, true));
                 throw new CC_Exception_API("Failed to retrieve expiring products from Cart66 Cloud");
             }
 
             $product_data = json_decode( $response['body'], true );
             self::$expiring_products = $product_data;
-            // CC_Log::write('Loaded expiring products from the cloud: ' . print_r(self::$expiring_products, TRUE));
+            // CM_Log::write('Loaded expiring products from the cloud: ' . print_r(self::$expiring_products, TRUE));
         }
 
         return $product_data;
