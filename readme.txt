@@ -3,8 +3,8 @@ Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
 Requires at least: 3.2
-Tested up to: 4.2.3
-Stable tag: 1.1.2
+Tested up to: 4.4.2
+Stable tag: 1.1.3
 
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -76,6 +76,10 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 
 == Changelog ==
 
+= Version 1.1.3 - 2/22/2016 =
+
+* Fix: Change CSS to properly show/hide elements when visitors are logged in/out of their Cart66 Cloud Membership accouts
+
 = Version 1.1.2 - 7/30/2015 =
 
 * Update: Dynamically include assets based on protocol in use to prevent mixed content over SSL
@@ -120,4 +124,4 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 
 = 1.0.0 =
 
-The membership features are now part of this add-on rather than in the core Cart66 Cloud plugin 
+The membership features are now part of this add-on rather than in the core Cart66 Cloud plugin

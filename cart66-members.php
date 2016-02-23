@@ -3,13 +3,13 @@
 Plugin Name: Cart66 Cloud - Members
 Plugin URI: http://cart66.com
 Description: Membership functionality for Cart66 Cloud
-Version: 1.1.2
+Version: 1.1.3
 Author: Reality66
 Author URI: http://www.reality66.com
 
 -------------------------------------------------------------------------
-Cart66 Cloud
-Copyright 2015  Reality66
+Cart66 Cloud Members
+Copyright 2016  Reality66
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
