@@ -3,11 +3,15 @@
 class CM_Account_Widget extends WP_Widget {
 
     public function __construct() {
-        CM_Log::write('Construct CM_Account_Widget');
-        $description = __( 'Customer account widget', 'cart66-members' );
-        $widget_ops = array('classname' => 'CM_Account_Widget', 'description' => $description );
-        $this->WP_Widget('CM_Account_Widget', 'Cart66 Cloud Accounts', $widget_ops);
-        
+        parent::__construct(
+            'CM_Account_Widget',
+            'Cart66 Cloud Accounts',
+            array(
+                'classname' => 'CM_Account_Widget',
+                'description' => __( 'Customer account widget', 'cart66-members' )
+            )
+        );
+
         // Add actions for ajax rendering for cart widget
         add_action('wp_ajax_render_cart66_account_widget', array('CM_Account_Widget', 'ajax_render_content'));
         add_action('wp_ajax_nopriv_render_cart66_account_widget', array('CM_Account_Widget', 'ajax_render_content'));
@@ -20,7 +24,7 @@ class CM_Account_Widget extends WP_Widget {
         if ( ! class_exists('Cart66_Cloud') ) { return; }
 
         $defaults = array (
-            'title' => __( 'My Account', 'cart66-members' ), 
+            'title' => __( 'My Account', 'cart66-members' ),
             'logged_out_message' => __( 'Please sign in', 'cart66-members' ),
             'logged_in_message' => 'Welcome %name%',
             'show_link_history' => '0',
@@ -96,10 +100,10 @@ class CM_Account_Widget extends WP_Widget {
     public static function ajax_render_content() {
         if ( ! class_exists('Cart66_Cloud') ) { return; }
 
-		$widget = new CM_Account_Widget();
+        $widget = new CM_Account_Widget();
         $widget_settings = $widget->get_settings();
-		$settings = array_shift ( $widget_settings );
-		// CM_Log::write ( 'Widget settings: ' . print_r ( $settings, true ) );
+        $settings = array_shift ( $widget_settings );
+        // CM_Log::write ( 'Widget settings: ' . print_r ( $settings, true ) );
 
         $url = new CC_Cloud_Url();
         $history_url = ( $_POST['show_link_history'] == 1 ) ? $url->order_history() : false;
@@ -109,15 +113,15 @@ class CM_Account_Widget extends WP_Widget {
         $sign_in_url = $home_url . '/sign-in';
         $sign_out_url = $home_url . '/sign-out';
 
-        $visitor = new CM_Visitor();
-		$logged_in_message = str_replace(
-			'%name%', 
-			'<span class="cc_visitor_name">' . $visitor->get_token('name') . '</span>', 
-			$settings['logged_in_message']
-	   	);
-		$logged_out_message = $settings['logged_out_message'];
+        $visitor = CM_Visitor::get_instance();
+        $logged_in_message = str_replace(
+            '%name%',
+            '<span class="cc_visitor_name">' . $visitor->get_token('name') . '</span>',
+            $settings['logged_in_message']
+        );
+        $logged_out_message = $settings['logged_out_message'];
 
-		
+
         $data = array(
             'history_url'  => $history_url,
             'profile_url'  => $profile_url,
