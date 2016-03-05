@@ -51,7 +51,7 @@ class CM_Visitor {
             if( ! is_array( $this->restricted_cats ) ) {
                 // Calling get_options because we want the entire array of all the restricted categories
                 $this->restricted_cats = CC_Admin_Setting::get_options( 'cart66_members_restrictions' );
-                // CM_Log::write( 'Loaded restricted categories: ' . print_r( $this->restricted_cats, true ) );
+                CM_Log::write( 'Loaded restricted categories: ' . print_r( $this->restricted_cats, true ) );
             }
         }
     }
@@ -80,7 +80,7 @@ class CM_Visitor {
             if ( $categories && ! isset( $categories['errors'] ) ) {
                 foreach( $categories as $cat ) {
                     if( ! $this->can_view_post_category( $cat->cat_ID ) ) {
-                        // CM_Log::write("Looping and Excluding category id: " . $cat->cat_ID);
+                        CM_Log::write("Looping and Excluding category id: " . $cat->cat_ID);
                         $this->excluded_cats[] = $cat->cat_ID;
                     }
                 }
@@ -103,12 +103,12 @@ class CM_Visitor {
 
             $cloud_visitor = new CM_Cloud_Visitor();
             $access_list = $cloud_visitor->get_memberships( $token );
-            // CM_Log::write("Loaded access list: " . print_r($access_list, true));
+            CM_Log::write("Loaded access list: " . print_r($access_list, true));
             $access_list = is_array( $access_list ) ? $access_list : array();
             $this->set_access_list( $access_list );
         }
         else {
-            // CM_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r($this->access_list, true));
+            CM_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r($this->access_list, true));
         }
 
         return $access_list;
@@ -297,7 +297,7 @@ class CM_Visitor {
         $memberships = get_post_meta( $post_id, '_ccm_required_memberships', true );
         $post_cat_ids = wp_get_post_categories( $post_id );
 
-        // CM_Log::write("Categories for post id $post_id" . print_r($post_cat_ids, TRUE));
+        CM_Log::write("Categories for post id $post_id" . print_r($post_cat_ids, TRUE));
 
         // Check if visitor may view the post category
         if ( count( $post_cat_ids ) > 0 ) {
@@ -336,7 +336,7 @@ class CM_Visitor {
     }
 
     public function can_view_post_category( $cat_id ) {
-        // CM_Log::write("Checking permission for category id: $cat_id");
+        CM_Log::write("Checking permission for category id: $cat_id");
         $allow = TRUE;
 
         if ( is_array( $this->restricted_cats ) && isset( $this->restricted_cats[ $cat_id ] ) ) {
@@ -344,8 +344,8 @@ class CM_Visitor {
             $allow = $this->has_permission( $memberships );
         }
 
-        // $dbg = $allow ? "Granting permission for category id: $cat_id" : "Denying permission for category id: $cat_id";
-        // CM_Log::write($dbg);
+        $dbg = $allow ? "Granting permission for category id: $cat_id" : "Denying permission for category id: $cat_id";
+        CM_Log::write($dbg);
 
         return $allow;
     }
@@ -360,7 +360,7 @@ class CM_Visitor {
      */
     public function has_permission( array $memberships, $days_in=0 ) {
         $access_list = $this->get_access_list();
-        // CM_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
+        CM_Log::write('Checking logged in visotors access list :: ' . print_r($access_list, true));
         foreach ( $memberships as $sku ) {
             foreach ( $access_list as $item ) {
                 $days_active = is_numeric( $item['days_in'] ) ? $item['days_in'] : 0;

@@ -51,16 +51,16 @@ class CM_Monitor {
 
     /**
      * Filter posts so that the post is not found at all if the visitor is not allowed to see it
-     * 
-     * By default, the "page" post type is not filtered. Additional post types may be added to the 
-     * unfiltered list of post types using the cc_unfiltered_post_types filter. Simply create a callback 
-     * function that accepts an array parameter of post type names and returns an array of post type 
+     *
+     * By default, the "page" post type is not filtered. Additional post types may be added to the
+     * unfiltered list of post types using the cc_unfiltered_post_types filter. Simply create a callback
+     * function that accepts an array parameter of post type names and returns an array of post type
      * names that should not be filtered.
-     * 
+     *
      * The returned array includes posts from post types that are not filtered and posts
      * from filtered post types that the visitor is allowed to view.
      *
-     * @return array The filtered list of posts 
+     * @return array The filtered list of posts
      */
     public function filter_posts( $posts ) {
         $visitor = CM_Visitor::get_instance();
@@ -110,7 +110,7 @@ class CM_Monitor {
 
 
     /**
-     * Enque styles to show and hide restricted links as well as css for members 
+     * Enque styles to show and hide restricted links as well as css for members
      *
      * The following files are in resources/css/
      * - logged-in.css
@@ -130,5 +130,3 @@ class CM_Monitor {
     }
 
 }
-
-
