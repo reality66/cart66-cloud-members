@@ -2,13 +2,25 @@
 
 class CM_Visitor {
 
-    protected static $token = FALSE;
-    protected static $access_list = FALSE;
-    protected static $restricted_cats = NULL;
-    protected static $excluded_cats = NULL;
-    protected static $user_data;
+    public $token = FALSE;
+    public $access_list = FALSE;
+    public $restricted_cats = NULL;
+    public $excluded_cats = NULL;
+    public $user_data;
 
-    public function __construct() {
+    public static $instance;
+
+    public static function get_instance() {
+        if ( is_null( self::$instance ) ) {
+            self::$instance = new CM_Visitor();
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct() {
+        CM_Log::write( 'Constructing new CM_Visitor' );
+
         $this->load_token();
         $this->load_restricted_cats();
         $this->load_excluded_category_ids();
@@ -16,7 +28,7 @@ class CM_Visitor {
 
     public function set_access_list( array $list ) {
         // CM_Log::write('Setting logged in vistor access list :: ' . print_r($list, true));
-        self::$access_list = $list;
+        $this->access_list = $list;
     }
 
 
@@ -31,15 +43,15 @@ class CM_Visitor {
      *             [1] => expiring_product_sku_02
      *             [2] => expiring_product_sku_03
      *         )
-     * 
+     *
      * )
      */
     public function load_restricted_cats() {
         if ( class_exists('Cart66_Cloud') ) {
-            if( ! is_array( self::$restricted_cats ) ) {
+            if( ! is_array( $this->restricted_cats ) ) {
                 // Calling get_options because we want the entire array of all the restricted categories
-                self::$restricted_cats = CC_Admin_Setting::get_options( 'cart66_members_restrictions' );
-                // CM_Log::write( 'Loaded restricted categories: ' . print_r( self::$restricted_cats, true ) );
+                $this->restricted_cats = CC_Admin_Setting::get_options( 'cart66_members_restrictions' );
+                // CM_Log::write( 'Loaded restricted categories: ' . print_r( $this->restricted_cats, true ) );
             }
         }
     }
@@ -50,8 +62,8 @@ class CM_Visitor {
      * @return array
      */
     public function load_excluded_category_ids() {
-        if ( !is_array( self::$excluded_cats ) ) {
-            self::$excluded_cats = array();
+        if ( !is_array( $this->excluded_cats ) ) {
+            $this->excluded_cats = array();
             $category_args = array(
                 'type'         => 'post',
                 'child_of'     => 0,
@@ -69,24 +81,24 @@ class CM_Visitor {
                 foreach( $categories as $cat ) {
                     if( ! $this->can_view_post_category( $cat->cat_ID ) ) {
                         // CM_Log::write("Looping and Excluding category id: " . $cat->cat_ID);
-                        self::$excluded_cats[] = $cat->cat_ID;
+                        $this->excluded_cats[] = $cat->cat_ID;
                     }
                 }
             }
-            
+
         }
     }
 
     public function excluded_category_ids() {
-        if( ! is_array( self::$excluded_cats ) ) {
+        if( ! is_array( $this->excluded_cats ) ) {
             $this->load_excluded_category_ids();
         }
-        // CM_Log::write('Returning excluded category ids: ' . print_r(self::$excluded_cats, TRUE));
-        return self::$excluded_cats;
+        // CM_Log::write('Returning excluded category ids: ' . print_r($this->excluded_cats, TRUE));
+        return $this->excluded_cats;
     }
 
     public function load_access_list( $force = false ) {
-        if ( $force || ! is_array( self::$access_list ) ) {
+        if ( $force || ! is_array( $this->access_list ) ) {
             $token = $this->get_token();
 
             $cloud_visitor = new CM_Cloud_Visitor();
@@ -96,14 +108,14 @@ class CM_Visitor {
             $this->set_access_list( $access_list );
         }
         else {
-            // CM_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r(self::$access_list, true));
+            // CM_Log::write('Not loading access list from cloud because it is already an array and is not forced to reload :: ' . print_r($this->access_list, true));
         }
 
         return $access_list;
     }
 
     public function drop_access_list() {
-        self::$access_list = null;
+        $this->access_list = null;
     }
 
     /**
@@ -122,14 +134,14 @@ class CM_Visitor {
      * @return array
      */
     public function get_access_list() {
-        $list = is_array( self::$access_list ) ? self::$access_list : $this->load_access_list();
+        $list = is_array( $this->access_list ) ? $this->access_list : $this->load_access_list();
         return $list;
     }
 
     public function load_token() {
-        self::$token = false;
+        $this->token = false;
         if ( isset( $_COOKIE['ccm_token'] ) ) {
-            self::$token = $_COOKIE['ccm_token'];
+            $this->token = $_COOKIE['ccm_token'];
         }
     }
 
@@ -172,7 +184,7 @@ class CM_Visitor {
         $expire = 0; // Expire cookie at end of session
         $data = $token . '~' . $name;
         $_COOKIE['ccm_token'] = $data;
-        self::$token = $data;
+        $this->token = $data;
         setcookie('ccm_token', $data, $expire, COOKIEPATH, COOKIE_DOMAIN, false, true);
         if (COOKIEPATH != SITECOOKIEPATH) {
             setcookie('ccm_token', $data, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, false, true);
@@ -187,9 +199,9 @@ class CM_Visitor {
     public function sign_out() {
         CM_Log::write('attempting to log out and drop the ccm_token');
 
-        self::$token = false;
+        $this->token = false;
         unset( $_COOKIE['ccm_token'] );
-	    setcookie('ccm_token', ' ', time() - 3600, COOKIEPATH);
+        setcookie('ccm_token', ' ', time() - 3600, COOKIEPATH);
         if ( COOKIEPATH != SITECOOKIEPATH ) {
             setcookie('ccm_token', ' ', time() - 3600, SITECOOKIEPATH, COOKIE_DOMAIN, false, true);
         }
@@ -197,7 +209,7 @@ class CM_Visitor {
 
     /**
      * Return true if the visitor has a valid member token, otherwise false.
-     * 
+     *
      * @return boolean
      */
     public function is_logged_in() {
@@ -208,7 +220,7 @@ class CM_Visitor {
      * Return the member access token, member name, or both values for the logged in visitor.
      *
      * If the visitor is not logged in or does not have a token return
-     * an empty string. Unless otherwise specified by the $type parameter, 
+     * an empty string. Unless otherwise specified by the $type parameter,
      * the member access token is returned.
      *
      * @param string $type [full, token, name]
@@ -222,10 +234,10 @@ class CM_Visitor {
             }
 
             $data = '';
-            if ( self::$token ) {
-                list( $token, $name ) = explode('~', self::$token);
+            if ( $this->token ) {
+                list( $token, $name ) = explode('~', $this->token);
                 $data = array(
-                    'full' => self::$token,
+                    'full' => $this->token,
                     'token' => $token,
                     'name' => $name
                 );
@@ -245,7 +257,7 @@ class CM_Visitor {
         $view = true;
         $memberships = get_post_meta( $post_id, '_ccm_required_memberships', true );
         $override = ( $this->is_logged_in() ) ? get_post_meta( $post_id, '_ccm_when_logged_in', true) : get_post_meta( $post_id, '_ccm_when_logged_out', true );
-         
+
         if ( $override == 'show' ) {
             $view = true;
             CM_Log::write('Can view link because show is forced to true');
@@ -327,8 +339,8 @@ class CM_Visitor {
         // CM_Log::write("Checking permission for category id: $cat_id");
         $allow = TRUE;
 
-        if ( is_array( self::$restricted_cats ) && isset( self::$restricted_cats[ $cat_id ] ) ) {
-            $memberships = self::$restricted_cats[ $cat_id ];
+        if ( is_array( $this->restricted_cats ) && isset( $this->restricted_cats[ $cat_id ] ) ) {
+            $memberships = $this->restricted_cats[ $cat_id ];
             $allow = $this->has_permission( $memberships );
         }
 
@@ -337,7 +349,7 @@ class CM_Visitor {
 
         return $allow;
     }
-    
+
 
     /**
      * Return true if one of the given memberships is in the access list and at least $days_in days old
@@ -367,15 +379,15 @@ class CM_Visitor {
     /**
      * Get the user data for the logged in visitor
      *
-     * Set the static member variable self::$user_data to the array of retrieved data for the logged
-     * in visitor. If not data could be retrieved, self::$user_data is set to an empty array.
+     * Set the static member variable $this->user_data to the array of retrieved data for the logged
+     * in visitor. If not data could be retrieved, $this->user_data is set to an empty array.
      */
     public function get_user_data( $force_reload=false ) {
-        if ( ! is_array( self::$user_data ) || count( self::$user_data ) == 0 || $force_reload ) {
+        if ( ! is_array( $this->user_data ) || count( $this->user_data ) == 0 || $force_reload ) {
             if ( $token = $this->get_token() ) {
                 CM_Log::write("Called load user data using token: $token");
-                self::$user_data = $this->get_cloud_user_data( $token );
-                CM_Log::write( 'Retrieve user data from the cloud: ' . print_r( self::$user_data, true ) );
+                $this->user_data = $this->get_cloud_user_data( $token );
+                CM_Log::write( 'Retrieve user data from the cloud: ' . print_r( $this->user_data, true ) );
             }
             else {
                 CM_Log::write('Not loading user data because nobody is logged in');
@@ -385,7 +397,7 @@ class CM_Visitor {
             CM_Log::write('Reusing user data');
         }
 
-        return self::$user_data;
+        return $this->user_data;
     }
 
     public function get_first_name() {

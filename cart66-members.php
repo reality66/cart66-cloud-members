@@ -147,7 +147,7 @@ if ( ! class_exists('Cart66_Members') ) {
                 add_action( 'wp_enqueue_scripts', array( $monitor, 'enqueue_css' ) );
 
                 // Check if current visitor is logged signed in to the cloud
-                $visitor = new CM_Visitor();
+                $visitor = CM_Visitor::get_instance();
                 add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );
 
             }

@@ -46,9 +46,9 @@ class CM_Shortcode_Manager {
      * to one or more of the provided SKUs. All SKUs will be lowercased before
      * evaluation.
      *
-     * Special SKU values: 
+     * Special SKU values:
      *     members: all logged in users regardless of subscriptions or subscription status
-     *     guests: all vistors who are not logged in 
+     *     guests: all vistors who are not logged in
      *
      * Attributes:
      *     sku: Comma separated list of SKUs required to view content
@@ -75,14 +75,14 @@ class CM_Shortcode_Manager {
     public static function visitor_in_group( $attrs ) {
         $in_group = false;
         if( is_array( $attrs ) ) {
-            $visitor = new CM_Visitor();
+            $visitor = CM_Visitor::get_instance();
             $member_id = $visitor->get_token();
             $days_in = ( isset( $attrs['days_in'] ) ) ? (int) $attrs['days_in'] : 0;
-            
+
             if ( isset( $attrs['sku'] ) ) {
                 $skus = explode(',', strtolower( trim( str_replace(' ', '', $attrs['sku'] ) ) ) );
             }
-            
+
             if ( strlen( $member_id ) == 0 && in_array('guests', $skus) ) {
                 // Show content to all non-logged in visitors if "guests" is in the array of SKUs
                 $in_group = true;
@@ -96,7 +96,7 @@ class CM_Shortcode_Manager {
                     CM_Log::write('Show to everyone logged in because the sky is members');
                 }
                 else {
-                    $visitor = new CM_Visitor();
+                    $visitor = CM_Visitor::get_instance();
                     if( $visitor->has_permission( $skus, $days_in ) ) {
                         $in_group = true;
                         CM_Log::write( "Show to $member_id: " . print_r( $skus, true ) );
@@ -107,10 +107,10 @@ class CM_Shortcode_Manager {
                 }
             }
         }
-        
+
         $dbg = $in_group ? 'YES the visitor is in the group' : 'NO the visitor is NOT in the group';
         // CC_Log::write("Visitor in group final assessment :: $dbg");
-        
+
         return $in_group;
     }
 

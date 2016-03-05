@@ -10,7 +10,7 @@ class CM_Monitor {
 
     public function access_denied_redirect() {
         global $post;
-        $visitor = new CM_Visitor();
+        $visitor = CM_Visitor::get_instance();
         if ( isset( $post ) && is_object( $post ) ) {
             if ( ! $visitor->can_view_post( $post->ID ) ) {
                 $access_denied_page_id = get_post_meta( $post->ID, '_ccm_access_denied_page_id', true );
@@ -25,7 +25,7 @@ class CM_Monitor {
 
     public function restrict_pages( $the_content ) {
         global $post;
-        $visitor = new CM_Visitor();
+        $visitor = CM_Visitor::get_instance();
 
         // Check if page may be accessed
         if( ! $visitor->can_view_post( $post->ID ) ) {
@@ -63,7 +63,7 @@ class CM_Monitor {
      * @return array The filtered list of posts 
      */
     public function filter_posts( $posts ) {
-        $visitor = new CM_Visitor();
+        $visitor = CM_Visitor::get_instance();
         $filtered_posts = array();
         $unfiltered_post_types = apply_filters('cc_unfiltered_post_types', array('page-slurp', 'page'));
         foreach ( $posts as $post ) {
@@ -80,7 +80,7 @@ class CM_Monitor {
         for ( $i=0; $i < count( $pages ); $i++ ) {
             if ( isset( $pages[ $i ] ) ) {
                 $page = $pages[ $i ];
-                $visitor = new CM_Visitor();
+                $visitor = CM_Visitor::get_instance();
                 if ( ! $visitor->can_view_link( $page->ID ) ) {
                     unset( $pages[ $i ] );
                 }
@@ -91,7 +91,7 @@ class CM_Monitor {
     }
 
     public function filter_menus( $classes, $item ) {
-        $visitor = new CM_Visitor();
+        $visitor = CM_Visitor::get_instance();
         if ( ! $visitor->can_view_link( $item->object_id ) ) {
             //CM_Log::write('Filtering menus by adding ccm-hidden class to: ' . $item->object_id);
             $classes[] = 'ccm-hidden';
@@ -101,7 +101,7 @@ class CM_Monitor {
     }
 
     public function filter_category_widget( $cat_args ) {
-        $visitor = new CM_Visitor();
+        $visitor = CM_Visitor::get_instance();
         $excluded_category_ids = $visitor->excluded_category_ids();
         $cat_args['exclude'] = implode(',', $excluded_category_ids);
         CM_Log::write('Modified cat_args to excluded denied category ids: ' . print_r($cat_args, TRUE));
@@ -118,7 +118,7 @@ class CM_Monitor {
      * - members.css
      */
     public function enqueue_css() {
-        $visitor = new CM_Visitor();
+        $visitor = CM_Visitor::get_instance();
 
         if ( $visitor->is_logged_in() ) {
             wp_enqueue_style('cm-logged-in', cm_url() . 'resources/css/logged-in.css');
