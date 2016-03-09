@@ -25,6 +25,8 @@ class CM_Monitor {
 
     public function restrict_pages( $the_content ) {
         global $post;
+        CM_Log::write( 'Called restrict pages' );
+
         $visitor = CM_Visitor::get_instance();
 
         // Check if page may be accessed

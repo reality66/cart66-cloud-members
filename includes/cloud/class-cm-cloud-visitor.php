@@ -1,14 +1,27 @@
-<?php 
+<?php
 
 class CM_Cloud_Visitor {
 
-    /** 
+    /**
      * @var CC_Cloud_API_V1 Cart66 Cloud API class
      */
-    public static $cloud;
+    public $cloud;
 
-    public function __construct() {
-        self::$cloud = new CC_Cloud_API_V1();
+    /**
+     * @var CM_Cloud_Visitor single instance
+     */
+    public static $instance;
+
+    public static function get_instance() {
+        if ( is_null( self::$instance ) ) {
+            self::$instance = new CM_Cloud_Visitor();
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct() {
+        $this->cloud = new CC_Cloud_API_V1();
     }
 
     /**
@@ -46,11 +59,11 @@ class CM_Cloud_Visitor {
         $memberships = array();
 
         if ( !empty( $token ) && strlen( $token ) > 3 ) {
-            $url = self::$cloud->api . "memberships/$token";
+            $url = $this->cloud->api . "memberships/$token";
             $headers = array( 'Accept' => 'application/json' );
-            $response = wp_remote_get( $url, self::$cloud->basic_auth_header( $headers ) );
+            $response = wp_remote_get( $url, $this->cloud->basic_auth_header( $headers ) );
 
-            if( self::$cloud->response_ok( $response ) ) {
+            if( $this->cloud->response_ok( $response ) ) {
                 $json = $response['body'];
                 $all = json_decode( $json, true );
                 if ( $status == 'all' ) {

@@ -101,7 +101,7 @@ class CM_Visitor {
         if ( $force || ! is_array( $this->access_list ) ) {
             $token = $this->get_token();
 
-            $cloud_visitor = new CM_Cloud_Visitor();
+            $cloud_visitor = CM_Cloud_Visitor::get_instance();
             $access_list = $cloud_visitor->get_memberships( $token );
             CM_Log::write("Loaded access list: " . print_r($access_list, true));
             $access_list = is_array( $access_list ) ? $access_list : array();
