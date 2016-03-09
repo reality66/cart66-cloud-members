@@ -28,7 +28,7 @@ class CM_Cart66_Members {
     private function define_constants() {
         $plugin_dir = basename(dirname(__DIR__));
 
-        define( 'CM_VERSION_NUMBER', '1.1.2' );
+        define( 'CM_VERSION_NUMBER', '1.1.4' );
         define( 'CM_PATH', WP_PLUGIN_DIR . '/' . $plugin_dir . '/' );
         define( 'CM_URL',  WP_PLUGIN_URL . '/' . $plugin_dir . '/' );
         define( 'CM_DEBUG', true );
