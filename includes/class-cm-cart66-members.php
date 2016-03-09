@@ -81,7 +81,7 @@ class CM_Cart66_Members {
             add_action( 'template_redirect', array( $monitor, 'access_denied_redirect' ) );
 
             // Remove content from restricted pages
-            add_filter( 'the_content', array( $monitor, 'restrict_pages' ) );
+            add_filter( 'the_content', array( $monitor, 'restrict_pages' ), 100 );
 
             $post_filter = CC_Admin_Setting::get_option( 'cart66_members_notifications', 'post_filter' );
             CM_Log::write( 'Post filter value: ' . $post_filter );
