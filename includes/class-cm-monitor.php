@@ -36,13 +36,13 @@ class CM_Monitor {
             if ( $visitor->is_logged_in() ) {
                 $the_content = __('This content is not included with your membership', 'cart66-members');
                 if ( isset( $settings['not_included'] ) && ! empty( $settings['not_included'] ) ) {
-                    $the_content = $settings['not_included'];
+                    $the_content = do_shortcode( $settings['not_included'] );
                 }
             }
             else {
                 $the_content = __('Please sign in to view this content', 'cart66-members');
                 if ( isset( $settings['sign_in_required'] ) && ! empty( $settings['sign_in_required'] ) ) {
-                    $the_content = $settings['sign_in_required'];
+                    $the_content = do_shortcode( $settings['sign_in_required'] );
                 }
             }
 
