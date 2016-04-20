@@ -3,8 +3,8 @@ Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
 Requires at least: 3.5
-Tested up to: 4.4.2
-Stable tag: 1.1.4
+Tested up to: 4.5
+Stable tag: 1.1.5
 
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -75,6 +75,10 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 4. Page editor meta box for requiring a membership to view the page (or post)
 
 == Changelog ==
+
+= Version 1.1.5 - 4/20/2016 =
+
+* Update: Allow Add To Cart buttons in content restriction notifications
 
 = Version 1.1.4 - 3/16/2016 =
 
