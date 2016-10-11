@@ -3,8 +3,8 @@ Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
 Requires at least: 3.5
-Tested up to: 4.5
-Stable tag: 1.1.5
+Tested up to: 4.6
+Stable tag: 1.1.6
 
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -76,51 +76,58 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 
 == Changelog ==
 
-= Version 1.1.5 - 4/20/2016 =
+= Version 1.1.6 - 10/11/2016 =
+
+* Update: Improvements to hiding / showing navigation (menu) items based on signed in status of visitor
+
+= Version 1.1.5 - 04/20/2016 =
 
 * Update: Allow Add To Cart buttons in content restriction notifications
 
-= Version 1.1.4 - 3/16/2016 =
+= Version 1.1.4 - 03/16/2016 =
 
 * Update: Improve performance of Cloud API calls
 * Update: Improve performance of checking content permission
 
-= Version 1.1.3 - 2/22/2016 =
+= Version 1.1.3 - 02/22/2016 =
 
 * Fix: Change CSS to properly show/hide elements when visitors are logged in/out of their Cart66 Cloud Membership accouts
 
-= Version 1.1.2 - 7/30/2015 =
+= Version 1.1.2 - 07/30/2015 =
 
 * Update: Dynamically include assets based on protocol in use to prevent mixed content over SSL
 
-= Version 1.1.1 - 7/27/2015 =
+= Version 1.1.1 - 07/27/2015 =
 
 * Fix shortocodes for retrieving information about the logged in user
 
-= Version 1.1.0 - 7/17/2015 =
+= Version 1.1.0 - 07/17/2015 =
 
 * Add plugin to official WordPress.org repository
 
-= Version 1.0.7 - 7/14/2015 =
+= Version 1.0.7 - 07/14/2015 =
 
 * Improve handling when Cart66 Cloud is not installed and activated
 
-= Version 1.0.6 - 4/16/2015 =
+= Version 1.0.6 - 04/16/2015 =
 
 * Fix account widget not displaying custom text
 * Fix PHP warning when there are no memberships
 
-= Version 1.0.4 - 3/27/2015 =
+= Version 1.0.4 - 03/27/2015 =
 
 * Fix problem redirecting to secure order history after sign in
 
-= Version 1.0.3 - 3/23/2015 =
+= Version 1.0.3 - 03/23/2015 =
 
 * Fixed bug in log download function
-* Version 1.0.2 - 3/20/2015
+
+
+= Version 1.0.2 - 03/20/2015 =
+
 * Added legacy shortcode syntax for the `cc_` prefixes
 
-= Version 1.0.1 - 3/17/2015 =
+= Version 1.0.1 - 03/17/2015 =
 
 * New auto update feature
 * New settings to show or hide restricted posts

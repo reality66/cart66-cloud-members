@@ -21,7 +21,7 @@ class CM_Log {
                 $date = current_time('m/d/Y g:i:s A') . ' ' . get_option('timezone_string');
                 $out = "========== $date ==========\nFile: $file" . ' :: Line: ' . $line . "\n$data";
 
-                if( is_writable( CM_PATH ) ) {
+                if( ! empty( self::$log_file ) &&  is_writable( CM_PATH ) ) {
                     file_put_contents( self::$log_file, $out . "\n\n", FILE_APPEND );
                 }
             }

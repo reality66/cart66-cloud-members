@@ -96,7 +96,7 @@ class CM_Monitor {
         $visitor = CM_Visitor::get_instance();
         if ( ! $visitor->can_view_link( $item->object_id ) ) {
             //CM_Log::write('Filtering menus by adding ccm-hidden class to: ' . $item->object_id);
-            $classes[] = 'ccm-hidden';
+            $classes[] = 'cm-hidden';
         }
 
         return $classes;
