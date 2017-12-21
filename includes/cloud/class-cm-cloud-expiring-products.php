@@ -2,7 +2,6 @@
 
 class CM_Cloud_Expiring_Products {
 
-
     /**
      * @var CC_Cloud_API_V1 Cart66 Cloud API class
      */
@@ -90,8 +89,8 @@ class CM_Cloud_Expiring_Products {
         return $product_data;
     }
 
-
     public function expiring_product_list() {
+        $memberships = [];
         $products = $this->load();
 
         foreach($products as $p) {
@@ -100,7 +99,5 @@ class CM_Cloud_Expiring_Products {
 
         return $memberships;
     }
-
-
 
 }
