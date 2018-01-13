@@ -3,9 +3,9 @@ Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
 Requires at least: 3.5
-Tested up to: 4.6
+Requires PHP: 5.4
+Tested up to: 4.9
 Stable tag: 1.1.6
-
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
