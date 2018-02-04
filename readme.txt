@@ -2,10 +2,10 @@
 Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
-Requires at least: 3.5
+Requires at least: 4.0
 Requires PHP: 5.4
 Tested up to: 4.9
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,7 +13,7 @@ Membership features to sell access to content on your WordPress e-commerce site
 
 == Description ==
 
-With Cart66 Cloud Members you can sell memberships and subscriptions to give your customers access to pages, posts, or even entire post categories on your WordPress website. A person can have an unlimted number of memberships. You can even drip access to your content based on how long a person has had their membership.
+With Cart66 Cloud Members you can sell memberships and subscriptions to give your customers access to pages, posts, or even entire post categories on your WordPress website. A person can have an unlimited number of memberships. You can even drip access to your content based on how long a person has had their membership.
 
 == Features ==
 
@@ -75,6 +75,10 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 4. Page editor meta box for requiring a membership to view the page (or post)
 
 == Changelog ==
+
+= Version 1.1.7 - 2/3/2018 =
+
+* New: Use Javascript to show and hide members content to prevent CSS caching from messing things up.
 
 = Version 1.1.6 - 10/11/2016 =
 
