@@ -131,4 +131,12 @@ class CM_Monitor {
         wp_enqueue_style('cm-members', cm_url() . 'resources/css/members.css');
     }
 
+    /**
+     * Enqueue scripts to toggle visibiltiy of member content based on CSS classes
+     */
+    public function enqueue_js() {
+        wp_enqueue_script( 'js-cookie', cm_url() . 'resources/js/js-cookie.js', ['jqueyr'] );
+        wp_enqueue_script( 'content-visibility', cm_url() . 'resources/js/content-visibility.js', ['jquery', 'js-cookie'] );
+    }
+
 }

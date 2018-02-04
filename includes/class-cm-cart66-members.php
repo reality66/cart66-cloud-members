@@ -99,6 +99,13 @@ class CM_Cart66_Members {
             add_filter( 'nav_menu_css_class', array( $monitor, 'filter_menus' ), 10, 2 );
             add_action( 'wp_enqueue_scripts', array( $monitor, 'enqueue_css' ) );
 
+            // Use JS to fix caching of member content visibiltiy
+            add_action( 'wp_enqueue_scripts', function() {
+                CM_Log::write( 'Uhh.... enqueue scripts NOW please?');
+                wp_enqueue_script( 'js-cookie', cm_url() . 'resources/js/js-cookie.js', ['jquery'] );
+                wp_enqueue_script( 'content-visibility', cm_url() . 'resources/js/content-visibility.js', ['jquery', 'js-cookie'] );
+            });
+
             // Check if current visitor is logged signed in to the cloud
             $visitor = CM_Visitor::get_instance();
             add_action( 'wp_loaded', array( $visitor, 'check_remote_login' ) );

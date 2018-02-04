@@ -185,9 +185,9 @@ class CM_Visitor {
         $data = $token . '~' . $name;
         $_COOKIE['ccm_token'] = $data;
         $this->token = $data;
-        setcookie('ccm_token', $data, $expire, COOKIEPATH, COOKIE_DOMAIN, false, true);
+        setcookie('ccm_token', $data, $expire, COOKIEPATH, COOKIE_DOMAIN, false, false);
         if (COOKIEPATH != SITECOOKIEPATH) {
-            setcookie('ccm_token', $data, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, false, true);
+            setcookie('ccm_token', $data, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, false, false);
             CM_Log::write("Logging in CC Member: $data");
         }
         $this->load_access_list( true ); // Force the reloading of the access list even if already set
@@ -203,7 +203,7 @@ class CM_Visitor {
         unset( $_COOKIE['ccm_token'] );
         setcookie('ccm_token', ' ', time() - 3600, COOKIEPATH);
         if ( COOKIEPATH != SITECOOKIEPATH ) {
-            setcookie('ccm_token', ' ', time() - 3600, SITECOOKIEPATH, COOKIE_DOMAIN, false, true);
+            setcookie('ccm_token', ' ', time() - 3600, SITECOOKIEPATH, COOKIE_DOMAIN, false, false);
         }
     }
 
