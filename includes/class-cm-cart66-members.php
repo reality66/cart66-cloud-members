@@ -66,6 +66,11 @@ class CM_Cart66_Members {
             // Initialize shortcodes for managing access to content
             CM_Shortcode_Manager::init();
 
+            // Initialize client page custom post type
+            add_action( 'init', function() {
+                CM_Client_Page::init();
+            });
+
             do_action ( 'after_cart66_members_init' );
         }
     }
