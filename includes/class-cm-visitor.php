@@ -296,6 +296,20 @@ class CM_Visitor {
         $allow = true;
         $memberships = get_post_meta( $post_id, '_ccm_required_memberships', true );
         $post_cat_ids = wp_get_post_categories( $post_id );
+        $post_type = get_post_type( $post_id );
+
+        // Check if this is the client page post type
+        if ( 'cm_client_page' == $post_type ) {
+            $client_page_email = get_post_meta( $post_id, 'cm_client_email', true );
+            $visitor_email = CC::visitor_email();
+            if ( $client_page_email == $visitor_email ) {
+                return true;
+            }
+            else {
+                wp_redirect('/');
+                die();
+            }
+        }
 
         CM_Log::write("Categories for post id $post_id" . print_r($post_cat_ids, TRUE));
 

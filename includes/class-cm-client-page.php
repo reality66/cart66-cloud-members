@@ -17,6 +17,36 @@ class CM_Client_Page {
         return $instance;
     }
 
+    /**
+     * Return the client page url 
+     *
+     * If the email address is found, return the url to the client page.
+     * Otherwise, return the site homepage.
+     * 
+     * @return string 
+     */
+    public static function get_url() {
+        global $wpdb;
+
+        $visitor_email = CC::visitor_email();
+        CM_Log::write("Got visitor email: $visitor_email");
+
+        $prepared_query = $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta where meta_key ='cm_client_email' and meta_value = %s", $visitor_email );
+        $post_ids = $wpdb->get_col( $prepared_query );
+        CM_Log::write("CM Client Email Query: " . $wpdb->last_query);
+        $post_id = array_shift( $post_ids );
+        if ( $post_id ) {
+            $permalink = get_permalink( $post_id );
+            CM_Log::write("Found permalink: $permalink");
+        }
+        else {
+            $permalink = get_site_url();
+            CM_Log::write("Could not find client page, returning site url: $permalink");
+        }
+
+        return $permalink;
+    }
+
     public static function get_instance() {
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
@@ -27,52 +57,6 @@ class CM_Client_Page {
 
         return self::$instance;
     }
-
-    /*
-    public function custom_bulk_actions() {
-        add_filter( 'current_screen', function( $screen ) {
-            CM_Log::write( 'Current screen: ' . print_r( $screen, true ) );
-        } );
-
-        add_filter('bulk_actions-edit-cm_client_page', function ( $actions ) {
-            $actions['approve_reviews'] = 'Approve';
-            $actions['deny_reviews'] = 'Deny';
-            $actions['pend_reviews'] = 'Pending';
-
-            return $actions;
-        } );
-
-        add_filter('handle_bulk_actions-edit-cm_client_page', 
-            function ( $redirect_to, $do_action, $post_ids ) {
-                CM_Log::write( "Redirect to: $redirect_to :: Do Action: $do_action :: Post IDs: " . print_r( $post_ids, true ) );
-
-                foreach ( $post_ids as $post_id ) {
-                    $status = false;
-
-                    switch ( $do_action ) {
-                        case 'approve_reviews':
-                            $status = 'approved';
-                            break;
-                        case 'deny_reviews':
-                            $status = 'denied';
-                            break;
-                        case 'pend_reviews':
-                            $status = 'pending';
-                            break;
-                    }
-
-                    if ( $status ) {
-                        update_post_meta( $post_id, 'review_details_status', $status );
-                    }
-                }
-                
-                return $redirect_to;
-            },
-            10,
-            3
-        );
-    }
-    */
 
     public function manage_custom_columns() {
         add_filter( 'manage_cm_client_page_posts_columns', function( $columns ) {

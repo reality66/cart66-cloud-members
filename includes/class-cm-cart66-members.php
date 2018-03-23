@@ -66,10 +66,14 @@ class CM_Cart66_Members {
             // Initialize shortcodes for managing access to content
             CM_Shortcode_Manager::init();
 
-            // Initialize client page custom post type
+            // Initialize routes and client page custom post type
             add_action( 'init', function() {
                 CM_Client_Page::init();
+                CM_Routes::init();
             });
+
+            
+            add_action( 'parse_query', ['CM_Route_Handler', 'run'] );
 
             do_action ( 'after_cart66_members_init' );
         }
