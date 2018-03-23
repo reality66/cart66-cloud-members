@@ -36,8 +36,10 @@ class CM_Admin_Settings_Notifications extends CC_Admin_Setting {
         $home_title = __( 'Member Home Page', 'cart66-members');
         $home = new CC_Admin_Settings_Select_Box( $home_title, 'member_home' );
         $home->new_option( __( 'Secure Order History', 'cart66' ), 'order_history', false );
+        $home->new_option( __( 'Client Page', 'cart66'), 'client-home', false );
         $home->description = __( 'The page where members will be directed after logging in', 'cart66-members' );
         $this->build_member_homepage_list( $home, $option_values['member_home'] );
+        $home->set_selected( $option_values['member_home']);
         $section->add_field( $home );
 
         // Add post type check boxes

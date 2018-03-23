@@ -171,6 +171,11 @@ class CM_Visitor {
             wp_redirect( $order_history_url );
             exit();
         }
+        elseif ( 'client-home' == $member_home ) {
+            $client_home = trailingslashit( get_site_url() ) . 'client-home/';
+            wp_redirect( $client_home );
+            exit();
+        }
         elseif ( $page_id != $member_home ) {
             // redirect to member home page
             $url = get_permalink( $member_home );
