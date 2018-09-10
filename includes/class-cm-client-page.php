@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Regsiter post type: cc_customer_review
- */
 class CM_Client_Page {
 
     protected static $instance;
@@ -116,7 +113,7 @@ class CM_Client_Page {
         register_post_type( 'cm_client_page', $options );
         add_post_type_support( 'cm_client_page', 'make-builder' );
 
-        // Register customer review meta box
+        // Register cliient page meta box
         new CM_Client_Page_Meta_Box();
     }
 
