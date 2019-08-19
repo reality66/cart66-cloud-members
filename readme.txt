@@ -3,8 +3,8 @@ Contributors: reality66,
 Donate link: http://cart66.com
 Tags: ecommerce, e-commerce membership, subscription, content restriction, sell access, courses, private posts
 Requires at least: 4.0
-Requires PHP: 5.4
-Tested up to: 4.9
+Requires PHP: 7.2
+Tested up to: 5.2
 Stable tag: 1.1.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -29,8 +29,8 @@ Here are some examples of what you can sell using Cart66 Cloud Members:
 
 = Minimum Requirements =
 
-* WordPress 3.5 or greater
-* PHP version 5.5 or greater
+* WordPress 5.0 or greater
+* PHP version 7.2 or greater
 * MySQL version 5.0 or greater
 
 = Automatic installation =
@@ -76,9 +76,10 @@ Cart66 Cloud Members [documentation is available here](http://help.cart66.com)
 
 == Changelog ==
 
-= Version 1.1.7 - 2/3/2018 =
+= Version 1.1.7 - 8/19/2019 =
 
 * New: Use Javascript to show and hide members content to prevent CSS caching from messing things up.
+* Fix: Deprecated create_function changed to anonymous function for Account Widget
 
 = Version 1.1.6 - 10/11/2016 =
 

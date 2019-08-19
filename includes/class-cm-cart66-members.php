@@ -39,7 +39,7 @@ class CM_Cart66_Members {
 
         if ( class_exists('Cart66_Cloud') ) {
             // If Cart66 Cloud is loaded register the account widget
-            add_action('widgets_init', create_function('', 'return register_widget("CM_Account_Widget");'));
+            add_action('widgets_init', function() { return register_widget("CM_Account_Widget"); } );
         } else {
             // If Cart66 Cloud is not loaded show and admin notice
             add_action( 'admin_notices', 'cart66_cloud_required_notice' );
